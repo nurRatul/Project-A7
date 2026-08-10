@@ -120,7 +120,7 @@ def four_point_transform(image, pts):
 	rect = order_points(pts)
 	(tl, tr, br, bl) = rect
 	# compute the width of the new image, which will be the
-	# maximum distance between bottom-right and bottom-left
+	# maximum distance between bottom-right and bottom-leftp
 	# x-coordiates or the top-right and top-left x-coordinates
 	widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
 	widthB = np.sqrt(((tr[0] - tl[0]) ** 2) + ((tr[1] - tl[1]) ** 2))
