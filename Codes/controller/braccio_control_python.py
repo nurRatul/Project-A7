@@ -11,6 +11,7 @@
 
 import serial
 import time
+import os
 import solverNNA
 import numpy as np
 
@@ -22,7 +23,7 @@ wristRot=[90,0,180,4]
 gripper=[73,73,0,5]
 
 
-arm = serial.Serial('COM4', 115200, timeout=5)
+arm = serial.Serial('COM6', 115200, timeout=5)
 print("Initializing arm") 
 time.sleep(2)
 arm.write(b'H0,90,20,90,90,73,20\n')  #home the arm at low speeds
@@ -84,11 +85,12 @@ def write_position(theta_base=base[0],theta_shoulder=shoulder[0],theta_elbow=elb
     theta_base_comp=solverNNA.backlash_compensation_base(theta_base)  #check if compensation is neededbacklash_compensation_base(theta_base)  #check if compensation is needed    
         
     angle_string_def_angles=[theta_base_comp,theta_shoulder,theta_elbow,theta_wrist,theta_wristRot,theta_gripper]
+    print(angle_string_def_angles)
     write_arduino(angle_string_def_angles)
     
     #write angle values in txt file without the compensation
     angles=[theta_base,theta_shoulder,theta_elbow,theta_wrist,theta_wristRot,theta_gripper]
-    text_file = open("prev_teta.txt", "w")
+    text_file = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "prev_teta.txt"), "w")
     iteration=[0,1,2,3,4,5]
     for elem in iteration:
         text_file.write(str(angles[elem]))
@@ -117,7 +119,7 @@ def move_horizontal(z):
         
         
 def get_previous_teta():
-    text_file = open("prev_teta.txt", "r")
+    text_file = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "prev_teta.txt"), "r")
     prev_teta_string=text_file.read()
     text_file.close()
     

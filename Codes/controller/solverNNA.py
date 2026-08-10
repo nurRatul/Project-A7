@@ -8,6 +8,7 @@ Created on Sun Jan  2 13:32:10 2022
 from sympy import *
 from math import *
 import numpy as np
+import os
 
 #from braccio_control_python import get_previous_teta
 
@@ -63,7 +64,7 @@ def move_to_position_cart(x,y,z):
     return theta_array
 
 def get_previous_teta2():
-    text_file = open("prev_teta.txt", "r")
+    text_file = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "prev_teta.txt"), "r")
     prev_teta_string=text_file.read()
     text_file.close()
     

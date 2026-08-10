@@ -1,0 +1,5 @@
+pyserial>=3.5
+opencv-python>=4.10
+numpy>=2.0
+sympy>=1.13
+keyboard>=0.13.5
