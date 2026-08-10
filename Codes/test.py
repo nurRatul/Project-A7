@@ -96,14 +96,19 @@ def main():
         if keyboard.is_pressed("p"):
             if best_detection is None:
                 print("No object detected yet!")
+            elif not using_field_warp:
+                print("FIELD MARKERS NOT FOUND - arm disabled. Place markers 1-4 forming an exact 600x300 mm rectangle.")
             else:
                 work_size = (working_image.shape[1], working_image.shape[0])
                 x_mm, y_mm = image_to_robot_xy(current_grab_point[0], work_size, (600, 300))
                 print("Detected:", best_detection["name"], best_detection["confidence"])
-                print("Optical position:", x_mm, ",", y_mm)
-                x_comp, y_comp = braccio_control_python.camera_compensation(x_mm, y_mm)
-                print("Position after compensation:", x_comp, ",", y_comp)
-                braccio_control_python.pick_up(x_comp, y_comp)
+                print("Camera position:", x_mm, ",", y_mm)
+                try:
+                    x_comp, y_comp = braccio_control_python.camera_compensation(x_mm, y_mm)
+                    print("Compensated (info only):", x_comp, ",", y_comp)
+                except ZeroDivisionError:
+                    print("Compensation skipped (zero coordinate)")
+                braccio_control_python.pick_up(x_mm, y_mm)
                 print("Object placed!")
 
         frame_count += 1
