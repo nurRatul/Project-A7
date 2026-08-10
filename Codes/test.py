@@ -5,7 +5,6 @@ import time
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "controller"))
 
 import cv2
-import keyboard
 from detection import (
     FieldTracker,
     YoloObjectDetector,
@@ -90,10 +89,17 @@ def main():
             current_grab_point[0] = best_detection["footprint"]
             draw_detection(working_image, best_detection)
             draw_crosshair(working_image, best_detection["center"])
+            status = "FIELD READY" if using_field_warp else "NO FIELD"
+            cv2.putText(working_image, status, (15, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0) if using_field_warp else (0, 0, 255), 2)
+            cv2.putText(working_image, f"p = grab {best_detection['name']}", (15, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
 
         cv2.imshow("detection_view", working_image)
 
-        if keyboard.is_pressed("p"):
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("q"):
+            break
+
+        if key == ord("p"):
             if best_detection is None:
                 print("No object detected yet!")
             elif not using_field_warp:
@@ -108,13 +114,13 @@ def main():
                     print("Compensated (info only):", x_comp, ",", y_comp)
                 except ZeroDivisionError:
                     print("Compensation skipped (zero coordinate)")
-                braccio_control_python.pick_up(x_mm, y_mm)
-                print("Object placed!")
+                try:
+                    braccio_control_python.pick_up(x_mm, y_mm)
+                    print("Object placed!")
+                except Exception as error:
+                    print("Pick-up failed:", error)
 
         frame_count += 1
-
-        if cv2.waitKey(1) & 0xFF == ord("q"):
-            break
 
     cap.release()
     cv2.destroyAllWindows()
