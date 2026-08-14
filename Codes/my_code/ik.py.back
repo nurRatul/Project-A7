@@ -8,7 +8,10 @@ LG = 35.0
 
 
 def clamp(value, minimum, maximum):
-    return max(minimum, min(value, maximum))
+    return max(
+        minimum,
+        min(value, maximum)
+    )
 
 
 def inverse_kinematics(
@@ -93,13 +96,12 @@ def inverse_kinematics(
         1.0
     )
 
-    theta3_base = math.acos(
-        cos_theta3
-    )
+    # Two possible J3 solutions
+    theta3_1 = math.acos(cos_theta3)
+    theta3_2 = -theta3_1
 
     # -------------------------
     # J2
-    # Try both configurations
     # -------------------------
 
     alpha = math.atan2(
@@ -107,67 +109,76 @@ def inverse_kinematics(
         wrist_r
     )
 
-    solutions = []
+    # -------- Solution 1 --------
 
-    for theta3 in [
-        theta3_base,
-        -theta3_base
-    ]:
+    beta_1 = math.atan2(
+        L3 * math.sin(theta3_1),
+        L2 +
+        L3 * math.cos(theta3_1)
+    )
 
-        beta = math.atan2(
-            L3 * math.sin(theta3),
-            L2 + L3 * math.cos(theta3)
-        )
+    theta2_1 = alpha - beta_1
 
-        theta2 = alpha - beta
+    # -------- Solution 2 --------
 
-        theta4 = (
-            phi_rad -
-            theta2 -
-            theta3
-        )
+    beta_2 = math.atan2(
+        L3 * math.sin(theta3_2),
+        L2 +
+        L3 * math.cos(theta3_2)
+    )
 
-        # Convert to degrees
-        j1 = math.degrees(theta1)
-        j2 = math.degrees(theta2)
-        j3 = math.degrees(theta3)
-        j4 = math.degrees(theta4)
-
-        solutions.append(
-            [j1, j2, j3, j4]
-        )
+    theta2_2 = alpha - beta_2
 
     # -------------------------
-    # Convert mathematical
-    # angles to servo angles
+    # Select valid solution
     # -------------------------
 
-    # Pick solution where J2 is positive
-    valid = [
-        s for s in solutions
-        if 0 <= s[1] <= 180
+    solutions = [
+        (theta2_1, theta3_1),
+        (theta2_2, theta3_2)
     ]
 
-    if not valid:
+    # J2 cannot be negative
+    valid_solutions = [
+        (theta2, theta3)
+        for theta2, theta3 in solutions
+        if math.degrees(theta2) >= 0
+    ]
+
+    if not valid_solutions:
         raise ValueError(
-            "No valid J2 solution"
+            "No IK solution with J2 >= 0 degrees"
         )
 
-    # Prefer solution with
-    # positive J3 as well
-    positive_j3 = [
-        s for s in valid
-        if 0 <= s[2] <= 180
-    ]
+    # Select first valid solution
+    theta2, theta3 = valid_solutions[0]
 
-    if positive_j3:
-        solution = positive_j3[0]
-    else:
-        solution = valid[0]
+    # -------------------------
+    # J4
+    # -------------------------
+
+    theta4 = (
+        phi_rad -
+        theta2 -
+        theta3
+    )
+
+    # -------------------------
+    # Radians -> degrees
+    # -------------------------
+
+    theta1 = math.degrees(theta1)
+    theta2 = math.degrees(theta2)
+    theta3 = math.degrees(theta3)
+    theta4 = math.degrees(theta4)
+
+    # -------------------------
+    # Return angles
+    # -------------------------
 
     return [
-        round(solution[0], 2),
-        round(solution[1], 2),
-        round(solution[2], 2),
-        round(solution[3], 2)
+        theta1,
+        theta2,
+        theta3,
+        theta4
     ]

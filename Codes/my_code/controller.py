@@ -44,8 +44,8 @@ class Controller:
         # mm
 
         self.xo = 0.0
-        self.yo = 200.0
-        self.zo = 0.0
+        self.yo = 25.0
+        self.zo = 200.0
 
 
         # ====================================================

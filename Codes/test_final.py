@@ -13,7 +13,11 @@ controller = Controller(
     debug=False
 )
 
-write_arduino([0, 0, 71.62276468221435, -134.92274683493403,0,0])
+
+# for i in range(0,190,30):
+#     write_arduino([i, 0, 71, 10,0,0])
+#     time.sleep(2)
+
 
 
 try:
