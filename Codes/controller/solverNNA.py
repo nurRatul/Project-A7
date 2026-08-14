@@ -23,7 +23,8 @@ def move_to_position_cart(x,y,z):
     r_compensation=1.02 #add 2 percent
     z=z+15  #compensation for backlash
     r_hor=sqrt(x**2+y**2)
-    r=sqrt(r_hor**2+(z-71.5)**2)*r_compensation
+    ## r=sqrt(r_hor**2+(z-71.5)**2)*r_compensation
+    r=sqrt(r_hor**2+(z-l0)**2)*r_compensation
     
     if y==0:
         if x<=0:
