@@ -12,8 +12,8 @@ except ImportError:
 
 class CarController:
     def __init__(self):
-        self.left_motor = BTSMotor(12, 13)  # GPIO pins
-        self.right_motor = BTSMotor(18, 19)  # GPIO pins
+        self.left_motor = BTSMotor(18, 19 , 23, 24)  # GPIO pins
+        self.right_motor = BTSMotor(12,13,14,15)  # GPIO pins
         self.frame = None
         self.detections = []
 
@@ -25,7 +25,7 @@ class CarController:
     def move_forward(self, deltaT=None, speed= 1.0):
         if deltaT == None:
             self.left_motor.forward(speed)
-            self.right_motor.forward(speed)
+            # self.right_motor.forward(speed)
         else:
             self.left_motor.forward(speed)
             self.right_motor.forward(speed)
