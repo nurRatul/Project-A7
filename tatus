@@ -1,0 +1,19 @@
+*   [33m57d048d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mcarCode[m[33m, [m[1;31morigin/carCode[m[33m)[m car coding started
+[31m|[m[32m\[m  
+[31m|[m * [33m2f69ec1[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m Updated the Directory
+* [32m|[m [33m2f7db2f[m deleted some unwanted Files
+* [32m|[m [33m948bc02[m dummy
+[32m|[m[32m/[m  
+* [33ma7d2419[m te-02: ik angle 2,3 not working exactly
+* [33m55bc6f6[m ik working but giving negative angles
+* [33md5b81a0[m my_code as function
+* [33mff55ee4[m changing the solverNNAby ai
+* [33mf073b30[m te 2: 'p' not working
+* [33m58853bd[m trial and error -01: arm not calculatingany near position
+* [33mfa89d4a[m trying to pinpoint location of the object using yolo
+* [33mda65b65[m updated 01
+*   [33m2596406[m Merge branch 'main' of github-acc1:nurRatul/Project-A7
+[33m|[m[34m\[m  
+[33m|[m * [33m82cdb14[m Week -06 Update
+* [34m|[m [33md0c6b64[m Starting Coding
+[34m|[m[34m/[m  
