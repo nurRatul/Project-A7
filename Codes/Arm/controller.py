@@ -11,7 +11,8 @@ class Controller:
         self,
         show_video=True,
         camera_id=0,
-        debug=True
+        debug=True,
+        detector=None
             ):
         
         self.show_video = show_video
@@ -30,8 +31,8 @@ class Controller:
         # CAMERA
         # ====================================================
 
-        self.image_width = 640
-        self.image_height = 480
+        self.image_width = 1080 # 640
+        self.image_height = 720 # 480
 
         self.horizontal_fov = 70.0
         self.vertical_fov = 55.0
@@ -44,8 +45,8 @@ class Controller:
         # mm
 
         self.xo = 0.0
-        self.yo = 25.0
-        self.zo = 200.0
+        self.yo = 0.0
+        self.zo = 0.0
 
 
         # ====================================================
@@ -89,7 +90,7 @@ class Controller:
         # DETECTOR
         # ====================================================
 
-        self.detector = BottleDetector(
+        self.detector = detector or BottleDetector(
             camera_id=camera_id
         )
 
@@ -183,7 +184,7 @@ class Controller:
     # PROCESS ONE FRAME
     # ========================================================
 
-    def update(self):
+    def update(self, frame=None, detections=None):
 
         """
         Capture one frame, detect the bottle,
@@ -203,7 +204,8 @@ class Controller:
         """
 
 
-        frame = self.detector.read_frame()
+        if frame is None:
+            frame = self.detector.read_frame()
 
 
         if frame is None:
@@ -221,9 +223,8 @@ class Controller:
         # DETECTION
         # ====================================================
 
-        detections = self.detector.detect(
-            frame
-        )
+        if detections is None:
+            detections = self.detector.detect(frame)
 
 
         # No bottle

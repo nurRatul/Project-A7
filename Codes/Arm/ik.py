@@ -4,7 +4,7 @@ import math
 L1 = 95.0
 L2 = 120.0
 L3 = 133.0
-LG = 35.0
+LG = 0 # 35.0
 
 
 def clamp(value, minimum, maximum):
