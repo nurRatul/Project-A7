@@ -4,8 +4,8 @@ import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "controller"))
 
-from my_code import Controller
-from controller.braccio_control_python import write_arduino
+from Arm import Controller
+from armController.braccio_control_python import write_arduino
 
 
 controller = Controller(
