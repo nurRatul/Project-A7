@@ -5,7 +5,7 @@ import time
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "controller"))
 
 from my_code import Controller
-from controller.braccio_control_python import write_arduino
+from controller.braccio_control_python import write_arduino,backlash
 
 
 controller = Controller(
@@ -33,6 +33,7 @@ try:
             # Your arm code here
             # arm.move(angles)
             arm_ang=angles
+            arm_ang[2] = 180- arm_ang[2]
             arm_ang.append(0)
             arm_ang.append(0)
             arm_ang = [int(x) for x in arm_ang]
@@ -49,3 +50,4 @@ except KeyboardInterrupt:
 finally:
 
     controller.close()
+

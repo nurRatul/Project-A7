@@ -30,8 +30,8 @@ class Controller:
         # CAMERA
         # ====================================================
 
-        self.image_width = 640
-        self.image_height = 480
+        self.image_width = 1080 # 640
+        self.image_height = 720 # 480
 
         self.horizontal_fov = 70.0
         self.vertical_fov = 55.0
@@ -44,8 +44,8 @@ class Controller:
         # mm
 
         self.xo = 0.0
-        self.yo = 25.0
-        self.zo = 200.0
+        self.yo = 0.0
+        self.zo = 0.0
 
 
         # ====================================================
