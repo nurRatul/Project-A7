@@ -7,7 +7,7 @@ except ImportError:
     from btsMotor import BTSMotor
 
 # ---------------------- GPIO Controll ---------------------------- #
-# from gpiozero import PWMOutputDevice, DigitalOutputDevice
+ from gpiozero import PWMOutputDevice, DigitalOutputDevice
 # ----------------------------------------------------------------- #
 
 class CarController:
