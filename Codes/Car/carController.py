@@ -7,7 +7,7 @@ except ImportError:
     from btsMotor import BTSMotor
 
 # ---------------------- GPIO Controll ---------------------------- #
- from gpiozero import PWMOutputDevice, DigitalOutputDevice
+# from gpiozero import PWMOutputDevice, DigitalOutputDevice
 # ----------------------------------------------------------------- #
 
 class CarController:
@@ -54,3 +54,24 @@ class CarController:
             sleep(deltaT)
             self.left_motor.stop()
             self.right_motor.stop()
+
+    def turn_right(self, deltaT=None, speed= 1.0):
+        if deltaT == None:
+            self.left_motor.forward(speed)
+            self.right_motor.backward(speed)
+        else:
+            self.left_motor.forward(speed)
+            self.right_motor.backward(speed)
+            sleep(deltaT)
+            self.left_motor.stop()
+            self.right_motor.stop()
+
+
+    def stop(self):         ## Stopes the both motors
+        self.left_motor.stop()
+        self.right_motor.stop()
+
+    
+    
+
+    
