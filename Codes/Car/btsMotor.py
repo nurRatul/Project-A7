@@ -1,10 +1,11 @@
 from time import sleep
 
 # ----- Temporary, remove after setiing into Pi ------ #
-PWMOutputDevice = None
-DigitalOutputDevice = None
+# PWMOutputDevice = None
+# DigitalOutputDevice = None
 # ---------------------------------------------------- #
 
+from gpiozero import PWMOutputDevice, DigitalOutputDevice
 
 class BTSMotor:
 
