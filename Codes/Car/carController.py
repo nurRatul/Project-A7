@@ -3,9 +3,7 @@ from time import sleep
 
 from .btsMotor import BTSMotor
 
-# ---------------------- GPIO Controll ---------------------------- #
-from gpiozero import PWMOutputDevice, DigitalOutputDevice
-# ----------------------------------------------------------------- #
+
 
 class CarController:
     def __init__(self, left_pins=None, right_pins=None):

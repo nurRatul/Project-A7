@@ -5,7 +5,9 @@ from time import sleep
 # DigitalOutputDevice = None
 # ---------------------------------------------------- #
 
+# ---------------------- GPIO Controll ---------------------------- #
 from gpiozero import PWMOutputDevice, DigitalOutputDevice
+# ----------------------------------------------------------------- #
 
 class BTSMotor:
 

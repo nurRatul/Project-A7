@@ -8,12 +8,18 @@ from threading import Lock
 from flask import Flask, jsonify, render_template_string, request
 from werkzeug.exceptions import HTTPException
 
-try:
-    from Car.carController import CarController
-except ImportError:
-    # Falls back to a plain import when app.py is run directly from inside
-    # the Car/ folder (so "Car" isn't importable as a package from there).
-    from carController import CarController
+# carController.py does "from .btsMotor import BTSMotor" — a relative import
+# that only works if it's loaded as part of the "Car" package. So instead of
+# falling back to a bare "import carController" (which would break that
+# relative import), we make sure the directory *containing* Car/ is on
+# sys.path and always import it as "Car.carController". This works whether
+# app.py lives next to Car/ or inside Car/ itself.
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = _THIS_DIR if os.path.isdir(os.path.join(_THIS_DIR, "Car")) else os.path.dirname(_THIS_DIR)
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, _PROJECT_ROOT)
+
+from Car.carController import CarController
 
 
 # ---------------------------------------------------------------------------
