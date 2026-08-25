@@ -1,18 +1,59 @@
 import atexit
+import logging
 import os
+import sys
+from logging.handlers import RotatingFileHandler
 from threading import Lock
 
 from flask import Flask, jsonify, render_template_string, request
+from werkzeug.exceptions import HTTPException
 
 try:
-		from Car.carController import CarController
+    from Car.carController import CarController
 except ImportError:
-		from Car.carController import CarController
+    # Falls back to a plain import when app.py is run directly from inside
+    # the Car/ folder (so "Car" isn't importable as a package from there).
+    from carController import CarController
+
+
+# ---------------------------------------------------------------------------
+# Logging setup — writes to loggs/car_controller.log (created if missing)
+# ---------------------------------------------------------------------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_DIR = os.path.join(BASE_DIR, "loggs")
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE = os.path.join(LOG_DIR, "car_controller.log")
+
+logger = logging.getLogger("car_controller")
+logger.setLevel(logging.DEBUG)
+
+_formatter = logging.Formatter(
+    fmt="%(asctime)s | %(levelname)-8s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+_file_handler = RotatingFileHandler(
+    LOG_FILE, maxBytes=2_000_000, backupCount=5, encoding="utf-8"
+)
+_file_handler.setLevel(logging.DEBUG)
+_file_handler.setFormatter(_formatter)
+
+_console_handler = logging.StreamHandler()
+_console_handler.setLevel(logging.INFO)
+_console_handler.setFormatter(_formatter)
+
+logger.addHandler(_file_handler)
+logger.addHandler(_console_handler)
 
 
 app = Flask(__name__)
-car = CarController()
 car_lock = Lock()
+
+try:
+    car = CarController()
+except Exception:
+    logger.exception("Failed to initialize CarController — check hardware/wiring")
+    raise
 
 
 CONTROL_PAGE = """<!doctype html>
@@ -68,15 +109,23 @@ CONTROL_PAGE = """<!doctype html>
 		speed.addEventListener('input', () => speedValue.value = Number(speed.value).toFixed(2));
 
 		async function send(command) {
-			const response = await fetch('/api/move', {
-				method: 'POST', headers: {'Content-Type': 'application/json'},
-				body: JSON.stringify({command, speed: Number(speed.value)})
-			});
-			const result = await response.json();
-			status.textContent = result.message || result.error;
+			try {
+				const response = await fetch('/api/move', {
+					method: 'POST', headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify({command, speed: Number(speed.value)})
+				});
+				const result = await response.json();
+				status.textContent = result.message || result.error;
+			} catch (err) {
+				status.textContent = 'Connection error';
+			}
 		}
 		async function sendDrive(left, right) {
-			await fetch('/api/drive', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({left, right, speed: Number(speed.value)})});
+			try {
+				await fetch('/api/drive', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({left, right, speed: Number(speed.value)})});
+			} catch (err) {
+				status.textContent = 'Connection error';
+			}
 		}
 		function stopDrive() { send('stop').catch(() => {}); }
 		const driveValues = {left: 0, right: 0};
@@ -119,75 +168,109 @@ CONTROL_PAGE = """<!doctype html>
 
 
 COMMANDS = {
-		"forward": "move_forward",
-		"backward": "move_backward",
-		"left": "turn_left",
-		"right": "turn_right",
-		"stop": "stop",
+    "forward": "move_forward",
+    "backward": "move_backward",
+    "left": "turn_left",
+    "right": "turn_right",
+    "stop": "stop",
 }
 
 
 def clamp(value):
-	return max(-1.0, min(1.0, float(value)))
+    return max(-1.0, min(1.0, float(value)))
 
 
 @app.get("/")
 def index():
-		return render_template_string(CONTROL_PAGE)
+    return render_template_string(CONTROL_PAGE)
 
 
 @app.post("/api/move")
 def move():
-		payload = request.get_json(silent=True) or {}
-		command = payload.get("command")
-		if command not in COMMANDS:
-				return jsonify(error="command must be forward, backward, left, right, or stop"), 400
+    payload = request.get_json(silent=True) or {}
+    command = payload.get("command")
+    if command not in COMMANDS:
+        logger.error("Rejected /api/move: invalid command=%r", command)
+        return jsonify(error="command must be forward, backward, left, right, or stop"), 400
 
-		try:
-				speed = float(payload.get("speed", 0.6))
-		except (TypeError, ValueError):
-				return jsonify(error="speed must be a number from 0 to 1"), 400
-		if not 0 <= speed <= 1:
-				return jsonify(error="speed must be a number from 0 to 1"), 400
+    try:
+        speed = float(payload.get("speed", 0.6))
+    except (TypeError, ValueError):
+        logger.error("Rejected /api/move: invalid speed=%r", payload.get("speed"))
+        return jsonify(error="speed must be a number from 0 to 1"), 400
+    if not 0 <= speed <= 1:
+        logger.error("Rejected /api/move: speed out of range=%s", speed)
+        return jsonify(error="speed must be a number from 0 to 1"), 400
 
-		with car_lock:
-				if command == "stop":
-						car.stop()
-				else:
-						getattr(car, COMMANDS[command])(speed=speed)
-		return jsonify(status="ok", command=command, message=f"{command} at {speed:.2f}")
+    try:
+        with car_lock:
+            if command == "stop":
+                car.stop()
+            else:
+                getattr(car, COMMANDS[command])(speed=speed)
+    except Exception:
+        logger.exception("Car command failed: command=%s speed=%.2f", command, speed)
+        return jsonify(error="failed to execute command on the car"), 500
+
+    message = f"{command} at {speed:.2f}"
+    logger.info("/api/move -> %s", message)
+    return jsonify(status="ok", command=command, message=message)
 
 
 @app.get("/api/status")
 def status():
-		return jsonify(status="ok")
+    return jsonify(status="ok")
 
 
 @app.post("/api/drive")
 def drive():
-		payload = request.get_json(silent=True) or {}
-		try:
-			speed = float(payload.get("speed", 0.6))
-			left = clamp(payload.get("left", 0)) * speed
-			right = clamp(payload.get("right", 0)) * speed
-		except (TypeError, ValueError):
-			return jsonify(error="left, right, and speed must be numbers"), 400
-		if not 0 <= speed <= 1:
-			return jsonify(error="speed must be a number from 0 to 1"), 400
-		with car_lock:
-			car.drive(left, right)
-		return jsonify(status="ok", left=left, right=right)
+    payload = request.get_json(silent=True) or {}
+    try:
+        speed = float(payload.get("speed", 0.6))
+        left = clamp(payload.get("left", 0)) * speed
+        right = clamp(payload.get("right", 0)) * speed
+    except (TypeError, ValueError):
+        logger.error("Rejected /api/drive: bad payload=%r", payload)
+        return jsonify(error="left, right, and speed must be numbers"), 400
+    if not 0 <= speed <= 1:
+        logger.error("Rejected /api/drive: speed out of range=%s", speed)
+        return jsonify(error="speed must be a number from 0 to 1"), 400
+
+    try:
+        with car_lock:
+            car.drive(left, right)
+    except Exception:
+        logger.exception("Car drive failed: left=%.2f right=%.2f", left, right)
+        return jsonify(error="failed to execute drive on the car"), 500
+
+    message = f"drive left={left:.2f} right={right:.2f}"
+    logger.info("/api/drive -> %s", message)
+    return jsonify(status="ok", left=left, right=right)
+
+
+@app.errorhandler(Exception)
+def handle_unexpected_error(error):
+    if isinstance(error, HTTPException):
+        return error
+    logger.exception("Unhandled exception on %s %s", request.method, request.path)
+    return jsonify(error="internal server error"), 500
 
 
 @atexit.register
 def stop_car():
-		car.stop()
+    logger.info("Shutting down — stopping car")
+    try:
+        car.stop()
+    except Exception:
+        logger.exception("Error while stopping car during shutdown")
 
 
 if __name__ == "__main__":
-		app.run(
-				host=os.getenv("CAR_HOST", "0.0.0.0"),
-				port=int(os.getenv("CAR_PORT", "5000")),
-				debug=False,
-				threaded=True,
-		)
+    host = os.getenv("CAR_HOST", "0.0.0.0")
+    port = int(os.getenv("CAR_PORT", "5000"))
+    logger.info("Starting car controller server on %s:%s", host, port)
+    try:
+        app.run(host=host, port=port, debug=False, threaded=True)
+    except Exception:
+        logger.exception("Server crashed")
+        sys.exit(1)
