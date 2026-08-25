@@ -1,10 +1,7 @@
 import os
 from time import sleep
 
-try:
-    from Car.btsMotor import BTSMotor
-except ImportError:
-    from btsMotor import BTSMotor
+from .btsMotor import BTSMotor
 
 # ---------------------- GPIO Controll ---------------------------- #
 from gpiozero import PWMOutputDevice, DigitalOutputDevice
