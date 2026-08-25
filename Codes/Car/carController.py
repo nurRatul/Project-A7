@@ -10,7 +10,7 @@ from gpiozero import PWMOutputDevice, DigitalOutputDevice
 class CarController:
     def __init__(self, left_pins=None, right_pins=None):
         left_pins = left_pins or self._pins_from_environment(
-            "CAR_LEFT_PINS", (22, 23, 24, 27)
+            "CAR_LEFT_PINS", (27,22, 23, 24)
         )
         right_pins = right_pins or self._pins_from_environment(
             "CAR_RIGHT_PINS", (6, 13, 19, 26)
