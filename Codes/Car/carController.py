@@ -8,11 +8,30 @@ from gpiozero import PWMOutputDevice, DigitalOutputDevice
 # ----------------------------------------------------------------- #
 
 class CarController:
-    def __init__(self):
-        self.left_motor = BTSMotor(6,13,19,26)  # GPIO pins
-        self.right_motor = BTSMotor(27,22,23,24)  # GPIO pins
+    def __init__(self, left_pins=None, right_pins=None):
+        left_pins = left_pins or self._pins_from_environment(
+            "CAR_LEFT_PINS", (22, 23, 24, 27)
+        )
+        right_pins = right_pins or self._pins_from_environment(
+            "CAR_RIGHT_PINS", (6, 13, 19, 26)
+        )
+        self.left_motor = BTSMotor(*left_pins)  # RPWM, LPWM, R_EN, L_EN
+        self.right_motor = BTSMotor(*right_pins)  # RPWM, LPWM, R_EN, L_EN
         self.frame = None
         self.detections = []
+
+    @staticmethod
+    def _pins_from_environment(name, default):
+        value = os.getenv(name)
+        if not value:
+            return default
+        try:
+            pins = tuple(int(pin.strip()) for pin in value.split(","))
+        except ValueError as error:
+            raise ValueError(f"{name} must contain four GPIO numbers") from error
+        if len(pins) != 4:
+            raise ValueError(f"{name} must contain four GPIO numbers")
+        return pins
 
     def update_vision(self, frame, detections):
         """Receive the frame and YOLO results from the shared vision loop."""
