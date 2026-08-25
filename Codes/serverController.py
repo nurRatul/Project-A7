@@ -5,7 +5,7 @@ from threading import Lock
 from flask import Flask, jsonify, render_template_string, request
 
 try:
-		from .carController import CarController
+		from Car.carController import CarController
 except ImportError:
 		from Car.carController import CarController
 

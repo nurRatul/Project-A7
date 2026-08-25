@@ -2,7 +2,7 @@ import os
 from time import sleep
 
 try:
-    from .btsMotor import BTSMotor
+    from Car.btsMotor import BTSMotor
 except ImportError:
     from btsMotor import BTSMotor
 
