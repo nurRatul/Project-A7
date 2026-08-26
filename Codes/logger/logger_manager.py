@@ -34,3 +34,7 @@ class LoggerManager:
             root_logger.addHandler(console_handler)
 
         cls._initialized = True
+
+    @staticmethod
+    def get_logger(name):
+        return logging.getLogger(name)
