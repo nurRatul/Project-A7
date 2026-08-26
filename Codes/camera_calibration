@@ -1,0 +1,300 @@
+import cv2
+import numpy as np
+
+
+# ============================================================
+# SETTINGS
+# ============================================================
+
+CAMERA_ID = 0
+
+IMAGE_WIDTH = 640
+IMAGE_HEIGHT = 480
+
+# Number of INTERNAL corners
+CHECKERBOARD = (9, 6)
+
+# Measure your actual checkerboard square
+# Example: 25 mm
+SQUARE_SIZE = 25.0
+
+# Number of successful checkerboard images to collect
+REQUIRED_IMAGES = 20
+
+
+# ============================================================
+# PREPARE REAL-WORLD CHECKERBOARD COORDINATES
+# ============================================================
+
+objp = np.zeros(
+    (CHECKERBOARD[0] * CHECKERBOARD[1], 3),
+    np.float32
+)
+
+objp[:, :2] = np.mgrid[
+    0:CHECKERBOARD[0],
+    0:CHECKERBOARD[1]
+].T.reshape(-1, 2)
+
+objp *= SQUARE_SIZE
+
+
+# ============================================================
+# STORAGE
+# ============================================================
+
+object_points = []
+image_points = []
+
+
+# ============================================================
+# CAMERA
+# ============================================================
+
+camera = cv2.VideoCapture(CAMERA_ID)
+
+camera.set(
+    cv2.CAP_PROP_FRAME_WIDTH,
+    IMAGE_WIDTH
+)
+
+camera.set(
+    cv2.CAP_PROP_FRAME_HEIGHT,
+    IMAGE_HEIGHT
+)
+
+if not camera.isOpened():
+    raise RuntimeError("Could not open camera.")
+
+
+print("Camera opened.")
+print("Show the checkerboard to the camera.")
+print("Press SPACE to capture a calibration image.")
+print("Press Q to finish.")
+
+
+# ============================================================
+# CAPTURE LOOP
+# ============================================================
+
+while True:
+
+    success, frame = camera.read()
+
+    if not success:
+        print("Failed to read camera frame.")
+        break
+
+    gray = cv2.cvtColor(
+        frame,
+        cv2.COLOR_BGR2GRAY
+    )
+
+    found, corners = cv2.findChessboardCorners(
+        gray,
+        CHECKERBOARD,
+        None
+    )
+
+    display = frame.copy()
+
+    if found:
+
+        cv2.drawChessboardCorners(
+            display,
+            CHECKERBOARD,
+            corners,
+            found
+        )
+
+        cv2.putText(
+            display,
+            "Checkerboard detected",
+            (20, 30),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.7,
+            (0, 255, 0),
+            2
+        )
+
+    else:
+
+        cv2.putText(
+            display,
+            "Checkerboard NOT detected",
+            (20, 30),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.7,
+            (0, 0, 255),
+            2
+        )
+
+
+    cv2.putText(
+        display,
+        f"Images: {len(image_points)}/{REQUIRED_IMAGES}",
+        (20, 60),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.7,
+        (255, 255, 255),
+        2
+    )
+
+
+    cv2.imshow(
+        "Camera Calibration",
+        display
+    )
+
+
+    key = cv2.waitKey(1) & 0xFF
+
+
+    # --------------------------------------------------------
+    # SPACE = CAPTURE
+    # --------------------------------------------------------
+
+    if key == ord(" "):
+
+        if found:
+
+            # Refine corner positions
+            refined_corners = cv2.cornerSubPix(
+                gray,
+                corners,
+                (11, 11),
+                (-1, -1),
+                (
+                    cv2.TERM_CRITERIA_EPS
+                    + cv2.TERM_CRITERIA_MAX_ITER,
+                    30,
+                    0.001
+                )
+            )
+
+            object_points.append(
+                objp.copy()
+            )
+
+            image_points.append(
+                refined_corners
+            )
+
+            print(
+                f"Captured image "
+                f"{len(image_points)}/{REQUIRED_IMAGES}"
+            )
+
+        else:
+
+            print(
+                "Checkerboard not detected. "
+                "Move it and try again."
+            )
+
+
+    # --------------------------------------------------------
+    # Q = FINISH
+    # --------------------------------------------------------
+
+    elif key == ord("q") or key == ord("Q"):
+
+        break
+
+
+    if len(image_points) >= REQUIRED_IMAGES:
+
+        print("Enough images collected.")
+        break
+
+
+# ============================================================
+# CLEAN UP
+# ============================================================
+
+camera.release()
+cv2.destroyAllWindows()
+
+
+# ============================================================
+# CHECK WHETHER WE HAVE ENOUGH DATA
+# ============================================================
+
+if len(image_points) < 10:
+
+    raise RuntimeError(
+        "Not enough calibration images."
+    )
+
+
+# ============================================================
+# CALIBRATION
+# ============================================================
+
+print("Calibrating camera...")
+
+ret, camera_matrix, distortion, rvecs, tvecs = (
+    cv2.calibrateCamera(
+        object_points,
+        image_points,
+        gray.shape[::-1],
+        None,
+        None
+    )
+)
+
+
+# ============================================================
+# EXTRACT PARAMETERS
+# ============================================================
+
+fx = camera_matrix[0, 0]
+fy = camera_matrix[1, 1]
+
+cx = camera_matrix[0, 2]
+cy = camera_matrix[1, 2]
+
+
+# ============================================================
+# PRINT RESULTS
+# ============================================================
+
+print()
+print("===================================")
+print("CAMERA CALIBRATION RESULTS")
+print("===================================")
+
+print(f"fx = {fx:.3f}")
+print(f"fy = {fy:.3f}")
+print(f"cx = {cx:.3f}")
+print(f"cy = {cy:.3f}")
+
+print()
+print("Camera matrix:")
+print(camera_matrix)
+
+print()
+print("Distortion coefficients:")
+print(distortion)
+
+print()
+print(f"Calibration error = {ret:.4f} pixels")
+
+
+# ============================================================
+# SAVE RESULTS
+# ============================================================
+
+np.savez(
+    "camera_calibration.npz",
+    camera_matrix=camera_matrix,
+    distortion=distortion,
+    fx=fx,
+    fy=fy,
+    cx=cx,
+    cy=cy
+)
+
+print()
+print("Saved as:")
+print("camera_calibration.npz")
