@@ -198,8 +198,15 @@ def move():
         with car_lock:
             if command == "stop":
                 car.stop()
-            else:
-                getattr(car, COMMANDS[command])(speed=speed)
+            elif command == "forward":
+                car.move_forward(speed=speed)
+            elif command == "backward":
+                car.move_backward(speed=speed)
+            elif command == "left":	
+                car.turn_left(speed=speed)
+            elif command == "right":
+                car.turn_right(speed=speed)
+                
     except Exception:
         logger.exception("Car command failed: command=%s speed=%.2f", command, speed)
         return jsonify(error="failed to execute command on the car"), 500
@@ -217,6 +224,7 @@ def status():
 @app.post("/api/drive")
 def drive():
     payload = request.get_json(silent=True) or {}
+    print(f' in drive -> {payload}')
     try:
         speed = float(payload.get("speed", 0.6))
         left = clamp(payload.get("left", 0)) * speed
