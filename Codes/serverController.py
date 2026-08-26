@@ -8,7 +8,7 @@ from werkzeug.exceptions import HTTPException
 
 from logger.logger_manager import LoggerManager
 
-LoggerManager.initialize()
+LoggerManager.initialize(print_on_console=False)
 
 logger = LoggerManager.get_logger("serverController")
 
@@ -179,6 +179,7 @@ def index():
 @app.post("/api/move")
 def move():
     payload = request.get_json(silent=True) or {}
+    print(payload)
     command = payload.get("command")
     if command not in COMMANDS:
         logger.error("Rejected /api/move: invalid command=%r", command)
