@@ -1,22 +1,38 @@
 import os
 from time import sleep
 
+#-----user defined------#
 from .btsMotor import BTSMotor
+from logger.logger_manager import LoggerManager
 
+logger = LoggerManager.get_logger('carController')
 
+#-----------------------#
 
 class CarController:
-    def __init__(self, left_pins=None, right_pins=None):
+    def __init__(
+        self,
+        left_pins=None,
+        right_pins=None,
+        imu=None,   # optional IMUManager
+    ):
         left_pins = left_pins or self._pins_from_environment(
-            "CAR_LEFT_PINS", (27,22, 23, 24)
+            "CAR_LEFT_PINS",
+            (27, 22, 23, 24)
         )
+
         right_pins = right_pins or self._pins_from_environment(
-            "CAR_RIGHT_PINS", (6, 13, 19, 26)
+            "CAR_RIGHT_PINS",
+            (6, 13, 19, 26)
         )
-        self.left_motor = BTSMotor(*left_pins)  # RPWM, LPWM, R_EN, L_EN
-        self.right_motor = BTSMotor(*right_pins)  # RPWM, LPWM, R_EN, L_EN
+
+        self.left_motor = BTSMotor(*left_pins)
+        self.right_motor = BTSMotor(*right_pins)
+
         self.frame = None
         self.detections = []
+
+        self.imu = imu
 
     @staticmethod
     def _pins_from_environment(name, default):
@@ -89,6 +105,50 @@ class CarController:
     def stop(self):         ## Stopes the both motors
         self.left_motor.stop()
         self.right_motor.stop()
+
+
+    ###-----------------------------Reading Imu datas Start --------------------###
+
+    def get_orientation(self):
+        if self.imu:
+            return self.imu.get_orientation()
+        return None
+
+
+    def get_acceleration(self):
+        if self.imu:
+            return self.imu.get_acceleration()
+        return None
+
+
+    def get_position(self):
+        if self.imu:
+            return self.imu.get_position()
+        return None
+
+
+    def get_telemetry(self):
+        if self.imu:
+            return self.imu.get_telemetry()
+        return {"available": False}
+
+    ###----------------------------- Reading Imu datas End --------------------###
+
+    ### ----------------------------- Cleanup Start --------------------###
+    def shutdown(self):
+        self.stop()
+
+        for motor in (self.left_motor, self.right_motor):
+            try:
+                motor.close()
+            except Exception:
+                logger.exception("Error closing motor")
+
+        if self.imu:
+            try:
+                self.imu.close()
+            except Exception:
+                logger.exception("Error closing IMU")
 
     
     

@@ -1,12 +1,16 @@
 import atexit
-import logging
 import os
 import sys
-from logging.handlers import RotatingFileHandler
 from threading import Lock
 
 from flask import Flask, jsonify, render_template_string, request
 from werkzeug.exceptions import HTTPException
+
+from logger.logger_manager import LoggerManager
+
+LoggerManager.initialize()
+
+logger = LoggerManager.get_logger("serverController")
 
 # carController.py does "from .btsMotor import BTSMotor" — a relative import
 # that only works if it's loaded as part of the "Car" package. So instead of
@@ -30,26 +34,7 @@ LOG_DIR = os.path.join(BASE_DIR, "loggs")
 os.makedirs(LOG_DIR, exist_ok=True)
 LOG_FILE = os.path.join(LOG_DIR, "car_controller.log")
 
-logger = logging.getLogger("car_controller")
-logger.setLevel(logging.DEBUG)
 
-_formatter = logging.Formatter(
-    fmt="%(asctime)s | %(levelname)-8s | %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
-
-_file_handler = RotatingFileHandler(
-    LOG_FILE, maxBytes=2_000_000, backupCount=5, encoding="utf-8"
-)
-_file_handler.setLevel(logging.DEBUG)
-_file_handler.setFormatter(_formatter)
-
-_console_handler = logging.StreamHandler()
-_console_handler.setLevel(logging.INFO)
-_console_handler.setFormatter(_formatter)
-
-logger.addHandler(_file_handler)
-logger.addHandler(_console_handler)
 
 
 app = Flask(__name__)
