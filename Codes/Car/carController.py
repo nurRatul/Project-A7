@@ -18,7 +18,7 @@ class CarController:
     ):
         left_pins = left_pins or self._pins_from_environment(
             "CAR_LEFT_PINS",
-            (27, 22, 23, 24)
+            (17, 22, 23, 24)
         )
 
         right_pins = right_pins or self._pins_from_environment(
