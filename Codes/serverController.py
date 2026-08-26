@@ -179,7 +179,7 @@ def index():
 @app.post("/api/move")
 def move():
     payload = request.get_json(silent=True) or {}
-    print(payload)
+    print(f' in move -> {payload}')
     command = payload.get("command")
     if command not in COMMANDS:
         logger.error("Rejected /api/move: invalid command=%r", command)
