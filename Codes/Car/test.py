@@ -4,7 +4,7 @@ car = CarController()
 
 car.move_forward(deltaT=2, speed=0.2)
 
-from sensors.basic.imu.imuManager import ImuManager
+from Car.sensors.basic.imu.imuManager import ImuManager
 
 imu = ImuManager()
 print(imu.get_orientation())
