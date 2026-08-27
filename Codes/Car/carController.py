@@ -2,10 +2,7 @@ import os
 from time import sleep
 
 #-----user defined------#
-try:
-    from .btsMotor import BTSMotor
-except ImportError:
-    from btsMotor import BTSMotor
+from .btsMotor import BTSMotor
 from logger.logger_manager import LoggerManager
 
 logger = LoggerManager.get_logger('carController')
