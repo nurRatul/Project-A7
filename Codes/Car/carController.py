@@ -160,6 +160,7 @@ class CarController:
                 break
 
             sleep(0.01)
+        self.stop()
 
 
 
