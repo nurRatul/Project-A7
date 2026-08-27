@@ -1,4 +1,11 @@
-from .carController import CarController
-from .btsMotor import BTSMotor
-# from .sensors.basic.imu.Mpu6050 import MPU6050, IMUTracker
-# from .sensors.basic.imu.imuManager import IMUManager
+__all__ = ["CarController", "BTSMotor"]
+
+
+def __getattr__(name):
+	if name == "CarController":
+		from .carController import CarController
+		return CarController
+	if name == "BTSMotor":
+		from .btsMotor import BTSMotor
+		return BTSMotor
+	raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

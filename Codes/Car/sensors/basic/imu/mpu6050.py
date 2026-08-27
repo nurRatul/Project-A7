@@ -38,7 +38,6 @@ import logging
 import math
 import time
 from threading import Lock, Thread
-from smbus2 import SMBus
 
 from logger.logger_manager import LoggerManager
 logger = LoggerManager.get_logger("car_controller.mpu6050")
@@ -64,6 +63,13 @@ class MPU6050:
     GRAVITY = 9.80665       # m/s^2
 
     def __init__(self, bus=1, address=DEFAULT_ADDRESS, sample_rate_hz=100):
+        try:
+            from smbus2 import SMBus
+        except ImportError as error:
+            raise RuntimeError(
+                "MPU6050 requires smbus2; install the project requirements before use"
+            ) from error
+
         self.address = address
         self.bus = SMBus(bus)
         self._configure(sample_rate_hz)
