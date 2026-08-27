@@ -204,7 +204,7 @@ class CarController:
         return {"available": False}
 
 
-    def normalize_angle(angle): # angle corrector
+    def normalize_angle(self,angle): # angle corrector
         while angle > 180:
             angle -= 360
         while angle < -180:
