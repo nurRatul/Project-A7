@@ -12,11 +12,11 @@ IMAGE_WIDTH = 640
 IMAGE_HEIGHT = 480
 
 # Number of INTERNAL corners
-CHECKERBOARD = (9, 6)
+CHECKERBOARD = (7, 7)
 
 # Measure your actual checkerboard square
 # Example: 25 mm
-SQUARE_SIZE = 25.0
+SQUARE_SIZE = 18.5
 
 # Number of successful checkerboard images to collect
 REQUIRED_IMAGES = 20
