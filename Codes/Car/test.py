@@ -28,21 +28,21 @@ from Car.carController import CarController
 from Car.sensors.basic.gps.gpsManager import GPSManager
 
 car = CarController()
-gps = GPSManager()
+gps = GPSManager(port="/dev/ttyAMA0", baudrate=9600, timeout=1.0)
 gps.start()
 
 
 commands = [
-    (car.move_forward, 2, 0.2),
-    (car.turn_left,    1, 0.2),
-    (car.move_backward,2, 0.2),
-    (car.turn_left,    1, 0.2),
+    (car.move_forward, 2, 0.3),
+    (car.turn_left,    1, 0.3),
+    (car.move_forward,2, 0.3),
+    (car.turn_left,    1, 0.3),
 ]
 
 for _ in range(2):
     for func, deltaT, speed in commands:
         func(deltaT=deltaT, speed=speed)
-        print(gps.get_location())
+        #print(gps.get_location())
         print(gps.get_telemetry())
 
 gps.stop()
