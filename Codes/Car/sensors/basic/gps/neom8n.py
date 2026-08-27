@@ -88,7 +88,7 @@ def _empty_fix():
 class NEOM8NGPS:
     """Low-level serial access + NMEA parsing for a NEO-M8N GPS module."""
 
-    def __init__(self, port="/dev/serial0", baudrate=9600, timeout=1.0):
+    def __init__(self, port="/dev/ttyAMA0", baudrate=9600, timeout=1.0):
         self._serial = serial.Serial(port, baudrate=baudrate, timeout=timeout)
         self._serial.reset_input_buffer()
 
