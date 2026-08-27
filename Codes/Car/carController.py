@@ -111,10 +111,6 @@ class CarController:
 
         start_yaw = self.get_orientation()["yaw"]
 
-        target_yaw = self.normalize_angle(
-            start_yaw + angle
-        )
-
         self.drive(-speed, speed)
 
         while True:
@@ -122,11 +118,9 @@ class CarController:
             current_yaw = self.get_orientation()["yaw"]
 
             # signed difference
-            error = self.normalize_angle(
-                current_yaw - start_yaw
-            )
+            rotated = current_yaw - start_yaw
 
-            if error >= angle:
+            if abs(rotated) >= angle:
                 break
 
             sleep(0.01)
@@ -151,10 +145,6 @@ class CarController:
 
         start_yaw = self.get_orientation()["yaw"]
 
-        target_yaw = self.normalize_angle(
-            start_yaw + angle
-        )
-
         self.drive(speed, -speed)
 
         while True:
@@ -162,11 +152,9 @@ class CarController:
             current_yaw = self.get_orientation()["yaw"]
 
             # signed difference
-            error = self.normalize_angle(
-                current_yaw - start_yaw
-            )
+            rotated = current_yaw - start_yaw
 
-            if error >= angle:
+            if abs(rotated) >= angle:
                 break
 
             sleep(0.01)
@@ -204,12 +192,6 @@ class CarController:
         return {"available": False}
 
 
-    def normalize_angle(self,angle): # angle corrector
-        while angle > 180:
-            angle -= 360
-        while angle < -180:
-            angle += 360
-        return angle
 
     ###----------------------------- Reading Imu datas End --------------------###
 
