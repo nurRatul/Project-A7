@@ -78,11 +78,17 @@ class MPU6050:
 
     def _configure(self, sample_rate_hz):
         who = self.bus.read_byte_data(self.address, self.WHO_AM_I)
-        if who not in (0x68, 0x69, 0x98):
+
+        if who == 0x68:
+            logger.info("MPU6050 detected")
+        elif who == 0x70:
+            logger.info("MPU6500 detected")
+        elif who == 0x71:
+            logger.info("MPU9250 detected")
+        else:
             logger.warning(
-                "Unexpected WHO_AM_I=0x%02X at address 0x%02X — "
-                "double check this is really an MPU-6050",
-                who, self.address,
+                "Unknown IMU WHO_AM_I=0x%02X",
+                who
             )
 
         self.bus.write_byte_data(self.address, self.PWR_MGMT_1, 0x00)  # wake up
