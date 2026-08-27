@@ -1,25 +1,20 @@
 import cv2
 from ultralytics import YOLO
 
+from . import config as cfg
 
-MODEL_PATH = "yolo26n.pt"
-
-CAMERA_ID = 0
-
-IMAGE_WIDTH = 640
-IMAGE_HEIGHT = 480
-
-CONFIDENCE = 0.50
-
-BOTTLE_CLASS_ID = 39
+# CHANGED: all constants below now come from config.py instead of
+# being defined here, so camera/detection settings live in one
+# place. Detection logic itself (bounding box, center pixel,
+# drawing) is unchanged from your original file.
 
 
 class BottleDetector:
 
     def __init__(
         self,
-        model_path=MODEL_PATH,
-        camera_id=CAMERA_ID
+        model_path=cfg.MODEL_PATH,
+        camera_id=cfg.CAMERA_ID
     ):
 
         self.model = YOLO(model_path)
@@ -28,12 +23,12 @@ class BottleDetector:
 
         self.camera.set(
             cv2.CAP_PROP_FRAME_WIDTH,
-            IMAGE_WIDTH
+            cfg.IMAGE_WIDTH
         )
 
         self.camera.set(
             cv2.CAP_PROP_FRAME_HEIGHT,
-            IMAGE_HEIGHT
+            cfg.IMAGE_HEIGHT
         )
 
         if not self.camera.isOpened():
@@ -56,7 +51,7 @@ class BottleDetector:
 
         results = self.model(
             frame,
-            conf=CONFIDENCE,
+            conf=cfg.YOLO_CONFIDENCE,
             verbose=False
         )
 
@@ -72,7 +67,7 @@ class BottleDetector:
                 class_id = int(box.cls[0])
                 confidence = float(box.conf[0])
 
-                if class_id != BOTTLE_CLASS_ID:
+                if class_id != cfg.BOTTLE_CLASS_ID:
                     continue
 
                 x1, y1, x2, y2 = (
