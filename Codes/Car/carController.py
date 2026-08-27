@@ -4,6 +4,7 @@ from time import sleep
 #-----user defined------#
 from .btsMotor import BTSMotor
 from logger.logger_manager import LoggerManager
+from Car.sensors.basic.imu.imuManager import IMUManager
 
 logger = LoggerManager.get_logger('carController')
 
@@ -14,7 +15,7 @@ class CarController:
         self,
         left_pins=None,
         right_pins=None,
-        imu=None,   # optional IMUManager
+        imu = None,   # IMUManager
     ):
         left_pins = left_pins or self._pins_from_environment(
             "CAR_LEFT_PINS",
@@ -32,7 +33,14 @@ class CarController:
         self.frame = None
         self.detections = []
 
-        self.imu = imu
+        if imu is None:
+            try:
+                self.imu = IMUManager()
+            except Exception as e:
+                logger.exception("Failed to initialize IMU: %s", e)
+                self.imu = None
+        else:
+            self.imu = imu
 
     @staticmethod
     def _pins_from_environment(name, default):
@@ -85,21 +93,84 @@ class CarController:
             sleep(deltaT)
             self.stop()
 
-    def turn_left(self, deltaT=None, speed= 1.0):
-        if deltaT == None:
-            self.drive(-speed, speed)
-        else:
-            self.drive(-speed, speed)
-            sleep(deltaT)
-            self.stop()
 
-    def turn_right(self, deltaT=None, speed= 1.0):
-        if deltaT == None:
-            self.drive(speed, -speed)
-        else:
-            self.drive(speed, -speed)
-            sleep(deltaT)
-            self.stop()
+    def turn_left(self, deltaT=None, speed=1.0, angle=None):
+        if angle is None:
+            if deltaT is None:
+                self.drive(-speed, speed)
+            else:
+                self.drive(-speed, speed)
+                sleep(deltaT)
+                self.stop()
+
+            return
+
+        # -----------------------------------
+        # Angle based rotation
+        # -----------------------------------
+
+        start_yaw = self.get_orientation()["yaw"]
+
+        target_yaw = self.normalize_angle(
+            start_yaw + angle
+        )
+
+        self.drive(-speed, speed)
+
+        while True:
+
+            current_yaw = self.get_orientation()["yaw"]
+
+            # signed difference
+            error = self.normalize_angle(
+                current_yaw - start_yaw
+            )
+
+            if error >= angle:
+                break
+
+            sleep(0.01)
+
+        self.stop()
+
+    def turn_right(self, deltaT=None, speed= 1.0, angle=None):
+        if angle is None:
+            # old behavior
+            if deltaT is None:
+                self.drive(speed, -speed)
+            else:
+                self.drive(speed, -speed)
+                sleep(deltaT)
+                self.stop()
+
+            return
+
+        # -----------------------------------
+        # Angle based rotation
+        # -----------------------------------
+
+        start_yaw = self.get_orientation()["yaw"]
+
+        target_yaw = self.normalize_angle(
+            start_yaw + angle
+        )
+
+        self.drive(speed, -speed)
+
+        while True:
+
+            current_yaw = self.get_orientation()["yaw"]
+
+            # signed difference
+            error = self.normalize_angle(
+                current_yaw - start_yaw
+            )
+
+            if error >= angle:
+                break
+
+            sleep(0.01)
+
 
 
     def stop(self):         ## Stopes the both motors
@@ -131,6 +202,14 @@ class CarController:
         if self.imu:
             return self.imu.get_telemetry()
         return {"available": False}
+
+
+    def normalize_angle(angle): # angle corrector
+        while angle > 180:
+            angle -= 360
+        while angle < -180:
+            angle += 360
+        return angle
 
     ###----------------------------- Reading Imu datas End --------------------###
 

@@ -33,17 +33,17 @@ gps.start()
 
 
 commands = [
-    (car.move_forward, 2, 0.3),
-    (car.turn_left,    1, 0.3),
-    (car.move_forward,2, 0.3),
-    (car.turn_left,    1, 0.3),
+    (car.move_forward, 3, 0.2),
+    (car.turn_left,    1, 0.2),
+    (car.move_forward, 3, 0.2),
+    (car.turn_left,    1, 0.2),
 ]
 
 for _ in range(2):
     for func, deltaT, speed in commands:
         func(deltaT=deltaT, speed=speed)
-        #print(gps.get_location())
-        print(gps.get_telemetry())
+        print(gps.get_location())
+        #print(gps.get_telemetry())
 
 gps.stop()
 
