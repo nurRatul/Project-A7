@@ -119,6 +119,7 @@ class CarController:
 
             # signed difference
             rotated = current_yaw - start_yaw
+            print(f"start_yaw: {start_yaw}, current_yaw: {current_yaw}, rotated: {rotated}, target_angle: {angle}")
 
             if abs(rotated) >= angle:
                 break
@@ -153,6 +154,7 @@ class CarController:
 
             # signed difference
             rotated = current_yaw - start_yaw
+            print(f"start_yaw: {start_yaw}, current_yaw: {current_yaw}, rotated: {rotated}, target_angle: {angle}")
 
             if abs(rotated) >= angle:
                 break
