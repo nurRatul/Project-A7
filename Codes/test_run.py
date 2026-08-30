@@ -185,7 +185,7 @@ class TelemetryPublisher:
         except Exception:
             pass
 
-        heading = .last_heading
+        heading = self.last_heading
         try:
             orient = self.car.get_orientation()
             if orient and "yaw" in orient:
