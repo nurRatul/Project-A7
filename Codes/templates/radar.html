@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Radar Map</title>
+  <link rel="stylesheet" href="/static/css/radar.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+  <div id="hud">
+    <div class="hud-block">
+      <span class="label">POS</span>
+      <span id="hud-pos">—</span>
+    </div>
+    <div class="hud-block">
+      <span class="label">HDG</span>
+      <span id="hud-hdg">—</span>
+    </div>
+    <div class="hud-block">
+      <span class="label">PATH</span>
+      <span id="hud-path">0</span>
+    </div>
+    <div class="hud-block">
+      <span class="label">MODE</span>
+      <span id="hud-mode">—</span>
+    </div>
+    <div class="hud-block status" id="hud-status">Connecting…</div>
+  </div>
+
+  <canvas id="radar"></canvas>
+
+  <div id="toolbar">
+    <button id="btn-center" title="Re-centre on vehicle">⌖ Center</button>
+    <button id="btn-reset" title="Clear path trail">✕ Clear Path</button>
+    <label class="zoom">
+      Zoom
+      <input type="range" id="zoom" min="2" max="40" step="1" value="8">
+      <span id="zoom-val">8 px/m</span>
+    </label>
+  </div>
+
+  <script src="/static/js/radar.js"></script>
+</body>
+</html>
