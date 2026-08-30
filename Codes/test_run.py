@@ -1,238 +1,426 @@
 """
 test_run.py
 -----------
-Simulates autonomous lawnmower / boustrophedon coverage of a rectangular
-area and feeds GPS + heading into the *same* interfaces that real sensors
-use.
+Real-hardware lawnmower / boustrophedon coverage for the rover.
 
-Because the Flask server runs in another process, pose updates are sent
-via HTTP POST to /api/vehicle/update — identical payload shape to what
-RadarBridge produces from real GPSManager + IMUManager.
+Uses the existing CarController (motors + IMU) and GPSManager exactly as
+your other scripts do.  While the rover drives, live GPS fixes and IMU
+yaw are pushed into the radar stack via HTTP (/api/vehicle/update) so
+the /radar page shows the true path.
 
-Usage:
-    # Terminal 1
+Distance along a leg is measured from GPS displacement (fallback: timed
+drive if GPS has no fix yet).  90° turns use the IMU angle-based
+turn_left / turn_right on CarController.
+
+Usage (on the Pi, with hardware):
+    # Terminal 1 — radar server (reuses sensors if you prefer; or --sim
+    # and let this script own GPS/IMU exclusively)
     python radar_server.py --sim
 
-    # Terminal 2
+    # Terminal 2 — this script owns the motors + GPS + IMU
     python test_run.py
-    python test_run.py --length 20 --width 12 --car-width 1.5 --speed 1.0
+    python test_run.py --length 15 --width 8 --car-width 1.2 --speed 0.25
+
+Safety:
+    Ctrl+C always stops the motors.
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 import math
+import os
 import sys
 import time
 import urllib.error
 import urllib.request
-import json
 from pathlib import Path
+from threading import Event, Thread
 
 # ---------------------------------------------------------------------------
-# Coverage parameters (overridable via CLI)
+# Project path — same pattern as your existing test.py
 # ---------------------------------------------------------------------------
-AREA_LENGTH_X = 20.0   # metres (East-West)
-AREA_WIDTH_Y  = 12.0   # metres (North-South)
-CAR_WIDTH     = 1.5    # metres (lateral swath step)
-SPEED_MPS     = 0.8    # simulated ground speed
-TURN_RATE_DPS = 45.0   # simulated yaw rate while turning
-UPDATE_HZ    = 15.0   # pose injection rate
+if __package__ in (None, ""):
+    # Prefer repo root that contains the Car/ package
+    here = Path(__file__).resolve().parent
+    candidates = [here, here.parent, here.parents[1] if len(here.parents) > 1 else here]
+    for root in candidates:
+        if (root / "Car").is_dir():
+            sys.path.insert(0, str(root))
+            break
+    else:
+        # Still allow local radar package next to this file
+        sys.path.insert(0, str(here))
 
-SERVER_URL = "http://127.0.0.1:5000"
+from Car.carController import CarController
+from Car.sensors.basic.gps.gpsManager import GPSManager
 
-# Origin GPS (arbitrary fixed point; only relative motion matters)
-ORIGIN_LAT = 23.8103
-ORIGIN_LON = 90.4125
+# ---------------------------------------------------------------------------
+# Defaults
+# ---------------------------------------------------------------------------
+AREA_LENGTH_X = 10.0    # metres along X (first leg)
+AREA_WIDTH_Y = 6.0      # metres along Y (coverage depth)
+CAR_WIDTH = 1.2         # lateral step between swaths (m)
+DRIVE_SPEED = 0.25      # motor speed 0..1 (keep low outdoors until tuned)
+TURN_SPEED = 0.22
+GPS_PORT = os.getenv("CAR_GPS_PORT", "/dev/ttyAMA0")
+GPS_BAUD = int(os.getenv("CAR_GPS_BAUDRATE", "9600"))
+SERVER_URL = os.getenv("RADAR_SERVER", "http://127.0.0.1:5000")
+TELEMETRY_HZ = 10.0
+GPS_WAIT_S = 60.0
+# If GPS never gets a fix, fall back to open-loop timed legs.
+# Rough calibration: seconds per metre at DRIVE_SPEED (tune on your rover).
+SEC_PER_METRE = 2.5
 
-_M_PER_DEG_LAT = 111_320.0
-_M_PER_DEG_LON = 111_320.0 * math.cos(math.radians(ORIGIN_LAT))
+
+# ---------------------------------------------------------------------------
+# Radar HTTP helpers (optional — script still works if server is down)
+# ---------------------------------------------------------------------------
+
+def _http_json(method: str, url: str, payload: dict | None = None, timeout: float = 1.5):
+    data = None if payload is None else json.dumps(payload).encode("utf-8")
+    headers = {"Content-Type": "application/json"} if data else {}
+    req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read().decode("utf-8") or "{}")
 
 
-def local_to_gps(x_m: float, y_m: float) -> tuple[float, float]:
-    lat = ORIGIN_LAT + y_m / _M_PER_DEG_LAT
-    lon = ORIGIN_LON + x_m / _M_PER_DEG_LON
-    return lat, lon
-
-
-def post_pose(latitude: float, longitude: float, heading: float, base_url: str) -> bool:
-    """
-    Push one pose update through the same HTTP interface external modules
-    (and RadarBridge) use.  Returns False on connection failure.
-    """
-    payload = {
-        "latitude": latitude,
-        "longitude": longitude,
-        "heading": heading,
-    }
-    data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(
-        f"{base_url}/api/vehicle/update",
-        data=data,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
+def radar_available(base_url: str) -> bool:
     try:
-        with urllib.request.urlopen(req, timeout=2.0) as resp:
-            return 200 <= resp.status < 300
-    except (urllib.error.URLError, TimeoutError, OSError) as exc:
-        print(f"[test_run] server unreachable: {exc}", file=sys.stderr)
+        _http_json("GET", f"{base_url}/api/status")
+        return True
+    except Exception:
         return False
 
 
-def post_reset(base_url: str) -> None:
-    req = urllib.request.Request(
-        f"{base_url}/api/vehicle/reset",
-        data=b"{}",
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
+def post_pose(base_url: str, lat: float, lon: float, heading: float) -> None:
     try:
-        urllib.request.urlopen(req, timeout=2.0)
+        _http_json(
+            "POST",
+            f"{base_url}/api/vehicle/update",
+            {"latitude": lat, "longitude": lon, "heading": heading},
+        )
     except Exception:
         pass
 
 
-def move_straight(
-    x0: float,
-    y0: float,
-    heading_deg: float,
+def post_reset(base_url: str) -> None:
+    try:
+        _http_json("POST", f"{base_url}/api/vehicle/reset", {})
+    except Exception:
+        pass
+
+
+# ---------------------------------------------------------------------------
+# Geometry helpers
+# ---------------------------------------------------------------------------
+
+def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    r = 6_371_000.0
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dp = math.radians(lat2 - lat1)
+    dl = math.radians(lon2 - lon1)
+    a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(a))
+
+
+def normalize_heading(deg: float) -> float:
+    h = deg % 360.0
+    if h < 0:
+        h += 360.0
+    return h
+
+
+# ---------------------------------------------------------------------------
+# Live telemetry broadcaster (GPS + IMU → radar) while motors run
+# ---------------------------------------------------------------------------
+
+class TelemetryPublisher:
+    """
+    Background thread: sample GPS + IMU and push into the radar server.
+    Shares the *same* GPSManager / CarController instances — no duplicates.
+    """
+
+    def __init__(self, car: CarController, gps: GPSManager, base_url: str, hz: float = 10.0):
+        self.car = car
+        self.gps = gps
+        self.base_url = base_url.rstrip("/")
+        self.dt = 1.0 / max(1.0, hz)
+        self._stop = Event()
+        self._thread: Thread | None = None
+        self.enabled = False
+        self.last_lat = None
+        self.last_lon = None
+        self.last_heading = 0.0
+
+    def start(self) -> None:
+        if not radar_available(self.base_url):
+            print(f"[telemetry] Radar server not at {self.base_url} — continuing without map feed")
+            self.enabled = False
+            return
+        self.enabled = True
+        post_reset(self.base_url)
+        self._stop.clear()
+        self._thread = Thread(target=self._loop, name="TelemetryPublisher", daemon=True)
+        self._thread.start()
+        print(f"[telemetry] Publishing to {self.base_url}/radar at {1/self.dt:.0f} Hz")
+
+    def stop(self) -> None:
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout=2.0)
+            self._thread = None
+
+    def _loop(self) -> None:
+        while not self._stop.is_set():
+            t0 = time.monotonic()
+            self.sample_once()
+            time.sleep(max(0.0, self.dt - (time.monotonic() - t0)))
+
+    def sample_once(self) -> None:
+        loc = None
+        try:
+            loc = self.gps.get_location()
+        except Exception:
+            pass
+
+        heading = self.last_heading
+        try:
+            orient = self.car.get_orientation()
+            if orient and "yaw" in orient:
+                # MPU yaw is relative; still useful for live rotation on the map
+                heading = normalize_heading(orient["yaw"])
+                self.last_heading = heading
+        except Exception:
+            pass
+
+        if loc is not None:
+            lat, lon = loc
+            if lat is not None and lon is not None:
+                self.last_lat, self.last_lon = lat, lon
+                if self.enabled:
+                    post_pose(self.base_url, lat, lon, heading)
+        elif self.enabled and self.last_lat is not None:
+            # Keep heading updates flowing even between GPS fixes
+            post_pose(self.base_url, self.last_lat, self.last_lon, heading)
+
+
+# ---------------------------------------------------------------------------
+# Motion primitives (real motors)
+# ---------------------------------------------------------------------------
+
+def wait_for_gps_fix(gps: GPSManager, timeout: float = GPS_WAIT_S):
+    print(f"Waiting for GPS fix (timeout {timeout:.0f}s)...")
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        loc = gps.get_location()
+        if loc is not None:
+            print(f"  GPS fix: lat={loc[0]:.7f}, lon={loc[1]:.7f}")
+            return loc
+        tel = gps.get_telemetry()
+        sats = tel.get("satellites")
+        print(f"  ... no fix yet (sats={sats}, has_fix={tel.get('has_fix')})")
+        time.sleep(1.0)
+    print("  WARNING: no GPS fix — will use timed open-loop legs")
+    return None
+
+
+def drive_distance_m(
+    car: CarController,
+    gps: GPSManager,
     distance_m: float,
     speed: float,
-    update_hz: float,
-    base_url: str,
-) -> tuple[float, float]:
-    """Drive straight. heading: 0=North, 90=East. Returns final (x, y)."""
-    rad = math.radians(heading_deg)
-    dx = math.sin(rad)   # East component
-    dy = math.cos(rad)   # North component
-
-    duration = distance_m / max(speed, 1e-6)
-    steps = max(1, int(duration * update_hz))
-    dt = duration / steps
-
-    x, y = x0, y0
-    for i in range(1, steps + 1):
-        x = x0 + dx * (distance_m * i / steps)
-        y = y0 + dy * (distance_m * i / steps)
-        lat, lon = local_to_gps(x, y)
-        if not post_pose(lat, lon, heading_deg, base_url):
-            raise SystemExit("Lost connection to radar server")
-        time.sleep(dt)
-    return x, y
-
-
-def turn_to(
-    x: float,
-    y: float,
-    current_hdg: float,
-    target_hdg: float,
-    turn_rate: float,
-    update_hz: float,
-    base_url: str,
+    sec_per_metre: float = SEC_PER_METRE,
 ) -> float:
-    """Rotate in place (shortest direction). Returns final heading."""
-    delta = (target_hdg - current_hdg + 180.0) % 360.0 - 180.0
-    if abs(delta) < 0.5:
-        lat, lon = local_to_gps(x, y)
-        post_pose(lat, lon, target_hdg, base_url)
-        return target_hdg
+    """
+    Drive forward until GPS reports ~distance_m travelled, or timed fallback.
+    Returns estimated metres driven.
+    """
+    start = gps.get_location()
+    car.move_forward(speed=speed)  # continuous until stop()
 
-    duration = abs(delta) / max(turn_rate, 1e-6)
-    steps = max(1, int(duration * update_hz))
-    dt = duration / steps
+    if start is None:
+        # Open-loop timed drive
+        duration = max(0.1, distance_m * sec_per_metre)
+        print(f"  open-loop forward {distance_m:.2f} m ≈ {duration:.1f}s @ speed={speed}")
+        time.sleep(duration)
+        car.stop()
+        return distance_m
 
-    for i in range(1, steps + 1):
-        h = current_hdg + delta * (i / steps)
-        lat, lon = local_to_gps(x, y)
-        if not post_pose(lat, lon, h, base_url):
-            raise SystemExit("Lost connection to radar server")
-        time.sleep(dt)
+    print(f"  GPS-guided forward {distance_m:.2f} m @ speed={speed}")
+    t0 = time.monotonic()
+    max_time = max(3.0, distance_m * sec_per_metre * 2.5)
+    travelled = 0.0
 
-    lat, lon = local_to_gps(x, y)
-    post_pose(lat, lon, target_hdg, base_url)
-    return target_hdg
+    try:
+        while True:
+            loc = gps.get_location()
+            if loc is not None:
+                travelled = haversine_m(start[0], start[1], loc[0], loc[1])
+                if travelled >= distance_m:
+                    break
+            if time.monotonic() - t0 > max_time:
+                print(f"  timeout after {travelled:.2f} m — stopping leg")
+                break
+            time.sleep(0.05)
+    finally:
+        car.stop()
 
+    print(f"  travelled ≈ {travelled:.2f} m")
+    return travelled
+
+
+def turn_degrees(car: CarController, direction: str, angle: float, speed: float) -> None:
+    """
+    direction: 'left' or 'right'
+    Uses IMU angle-based turn when available; otherwise timed fallback.
+    """
+    angle = abs(float(angle))
+    print(f"  turn {direction} {angle:.0f}° @ speed={speed}")
+
+    orient = car.get_orientation()
+    if orient is None or "yaw" not in orient:
+        # Timed fallback (~1.2 s per 90° at speed 0.22 — tune as needed)
+        duration = (angle / 90.0) * 1.2
+        if direction == "left":
+            car.turn_left(deltaT=duration, speed=speed)
+        else:
+            car.turn_right(deltaT=duration, speed=speed)
+        return
+
+    if direction == "left":
+        car.turn_left(speed=speed, angle=angle)
+    else:
+        car.turn_right(speed=speed, angle=angle)
+
+
+# ---------------------------------------------------------------------------
+# Coverage pattern (real hardware)
+# ---------------------------------------------------------------------------
 
 def run_coverage(
-    length_x: float = AREA_LENGTH_X,
-    width_y: float = AREA_WIDTH_Y,
-    car_width: float = CAR_WIDTH,
-    speed: float = SPEED_MPS,
-    turn_rate: float = TURN_RATE_DPS,
-    update_hz: float = UPDATE_HZ,
-    base_url: str = SERVER_URL,
+    length_x: float,
+    width_y: float,
+    car_width: float,
+    drive_speed: float,
+    turn_speed: float,
+    server_url: str,
+    gps_port: str,
+    gps_baud: int,
+    sec_per_metre: float,
 ) -> None:
-    print(f"Waiting for radar server at {base_url} ...")
-    for _ in range(30):
+    print("=== Real rover coverage run ===")
+    print(f"  area: {length_x} m × {width_y} m, swath={car_width} m")
+    print(f"  drive_speed={drive_speed}, turn_speed={turn_speed}")
+    print(f"  GPS: {gps_port} @ {gps_baud}")
+    print(f"  radar: {server_url}")
+    print()
+
+    car = CarController()
+    gps = GPSManager(port=gps_port, baudrate=gps_baud, timeout=1.0)
+    gps.start()
+
+    pub = TelemetryPublisher(car, gps, server_url, hz=TELEMETRY_HZ)
+
+    try:
+        wait_for_gps_fix(gps, timeout=GPS_WAIT_S)
+        pub.start()
+        # Give publisher one sample at origin
+        time.sleep(0.3)
+        pub.sample_once()
+
+        y_covered = 0.0
+        going_forward = True  # alternate leg direction
+        swath = 0
+
+        # Initial heading assumed "along +X"; we don't need absolute compass —
+        # relative IMU turns are enough for the lawnmower sequence.
+        while y_covered < width_y - 1e-3:
+            # --- long leg ---
+            print(f"\n[swath {swath}] long leg ({'outbound' if going_forward else 'return'})")
+            drive_distance_m(car, gps, length_x, drive_speed, sec_per_metre)
+
+            remaining = width_y - y_covered
+            if remaining < car_width * 0.4:
+                break
+
+            step = min(car_width, remaining)
+
+            # Lawnmower turn sequence:
+            # After outbound (forward): turn right 90 → step → turn right 90
+            # After return:             turn left  90 → step → turn left  90
+            if going_forward:
+                turn_degrees(car, "right", 90, turn_speed)
+                print(f"[swath {swath}] lateral step {step:.2f} m")
+                drive_distance_m(car, gps, step, drive_speed, sec_per_metre)
+                turn_degrees(car, "right", 90, turn_speed)
+            else:
+                turn_degrees(car, "left", 90, turn_speed)
+                print(f"[swath {swath}] lateral step {step:.2f} m")
+                drive_distance_m(car, gps, step, drive_speed, sec_per_metre)
+                turn_degrees(car, "left", 90, turn_speed)
+
+            y_covered += step
+            going_forward = not going_forward
+            swath += 1
+            print(f"  y_covered ≈ {y_covered:.2f} / {width_y:.2f} m")
+
+        print("\n=== Coverage finished — stopping ===")
+
+    except KeyboardInterrupt:
+        print("\nInterrupted — emergency stop")
+    finally:
         try:
-            urllib.request.urlopen(f"{base_url}/api/status", timeout=1.0)
-            break
+            car.stop()
         except Exception:
-            time.sleep(0.5)
-    else:
-        print("ERROR: radar server not reachable. Start it with:")
-        print("  python radar_server.py --sim")
-        sys.exit(1)
-
-    post_reset(base_url)
-
-    # Seed at origin, facing East
-    post_pose(ORIGIN_LAT, ORIGIN_LON, 90.0, base_url)
-
-    x, y = 0.0, 0.0
-    heading = 90.0
-    going_east = True
-    swath = 0
-
-    print(f"Coverage area: {length_x} m × {width_y} m, swath={car_width} m")
-    print(f"Origin GPS: {ORIGIN_LAT}, {ORIGIN_LON}")
-    print("Open http://localhost:5000/radar to watch\n")
-
-    while y < width_y - 1e-6:
-        # Drive along X
-        target_hdg = 90.0 if going_east else 270.0
-        heading = turn_to(x, y, heading, target_hdg, turn_rate, update_hz, base_url)
-        x, y = move_straight(x, y, heading, length_x, speed, update_hz, base_url)
-
-        remaining = width_y - y
-        if remaining < car_width * 0.5:
-            break
-
-        step = min(car_width, remaining)
-        # Step North
-        heading = turn_to(x, y, heading, 0.0, turn_rate, update_hz, base_url)
-        x, y = move_straight(x, y, heading, step, speed, update_hz, base_url)
-
-        going_east = not going_east
-        swath += 1
-        print(f"  swath {swath}: now at ({x:.2f}, {y:.2f})")
-
-    print("\nCoverage finished.")
-    print(f"Final pose: x={x:.2f} m, y={y:.2f} m, heading={heading:.1f}°")
+            pass
+        pub.stop()
+        try:
+            car.shutdown()
+        except Exception:
+            pass
+        try:
+            gps.close()
+        except Exception:
+            pass
+        print("Motors stopped, GPS closed.")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Simulated lawnmower coverage for radar map")
-    parser.add_argument("--length", type=float, default=AREA_LENGTH_X)
-    parser.add_argument("--width", type=float, default=AREA_WIDTH_Y)
-    parser.add_argument("--car-width", type=float, default=CAR_WIDTH)
-    parser.add_argument("--speed", type=float, default=SPEED_MPS)
-    parser.add_argument("--turn-rate", type=float, default=TURN_RATE_DPS)
+    parser = argparse.ArgumentParser(description="Real rover lawnmower coverage + radar feed")
+    parser.add_argument("--length", type=float, default=AREA_LENGTH_X, help="Long leg length (m)")
+    parser.add_argument("--width", type=float, default=AREA_WIDTH_Y, help="Coverage depth (m)")
+    parser.add_argument("--car-width", type=float, default=CAR_WIDTH, help="Swath / lateral step (m)")
+    parser.add_argument("--speed", type=float, default=DRIVE_SPEED, help="Drive speed 0..1")
+    parser.add_argument("--turn-speed", type=float, default=TURN_SPEED, help="Turn speed 0..1")
     parser.add_argument("--server", type=str, default=SERVER_URL, help="Radar server base URL")
+    parser.add_argument("--gps-port", type=str, default=GPS_PORT)
+    parser.add_argument("--gps-baud", type=int, default=GPS_BAUD)
+    parser.add_argument(
+        "--sec-per-metre",
+        type=float,
+        default=SEC_PER_METRE,
+        help="Open-loop timing fallback (seconds per metre)",
+    )
     args = parser.parse_args()
 
-    try:
-        run_coverage(
-            length_x=args.length,
-            width_y=args.width,
-            car_width=args.car_width,
-            speed=args.speed,
-            turn_rate=args.turn_rate,
-            base_url=args.server.rstrip("/"),
-        )
-    except KeyboardInterrupt:
-        print("\nInterrupted.")
+    if not 0.0 < args.speed <= 1.0:
+        parser.error("--speed must be in (0, 1]")
+    if not 0.0 < args.turn_speed <= 1.0:
+        parser.error("--turn-speed must be in (0, 1]")
+
+    run_coverage(
+        length_x=args.length,
+        width_y=args.width,
+        car_width=args.car_width,
+        drive_speed=args.speed,
+        turn_speed=args.turn_speed,
+        server_url=args.server.rstrip("/"),
+        gps_port=args.gps_port,
+        gps_baud=args.gps_baud,
+        sec_per_metre=args.sec_per_metre,
+    )
 
 
 if __name__ == "__main__":
