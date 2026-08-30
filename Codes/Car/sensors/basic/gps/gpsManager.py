@@ -35,7 +35,7 @@ class GPSManager:
     """
 
     def __init__(self, port=None, baudrate=None, timeout=1.0, auto_start=False):
-        port = port or os.getenv("CAR_GPS_PORT", "/dev/serial0")
+        port = port or os.getenv("CAR_GPS_PORT", "/dev/serial1")
         baudrate = int(baudrate or os.getenv("CAR_GPS_BAUDRATE", "9600"))
 
         self.gps = NEOM8NGPS(port=port, baudrate=baudrate, timeout=timeout)
