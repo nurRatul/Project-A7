@@ -64,7 +64,7 @@ AREA_WIDTH_Y = 6.0      # metres along Y (coverage depth)
 CAR_WIDTH = 1.2         # lateral step between swaths (m)
 DRIVE_SPEED = 0.25      # motor speed 0..1 (keep low outdoors until tuned)
 TURN_SPEED = 0.22
-GPS_PORT = os.getenv("CAR_GPS_PORT", "/dev/ttyAMA0")
+GPS_PORT = os.getenv("CAR_GPS_PORT", "/dev/ttyAMA10")
 GPS_BAUD = int(os.getenv("CAR_GPS_BAUDRATE", "9600"))
 SERVER_URL = os.getenv("RADAR_SERVER", "http://127.0.0.1:5000")
 TELEMETRY_HZ = 10.0
@@ -185,7 +185,7 @@ class TelemetryPublisher:
         except Exception:
             pass
 
-        heading = self.last_heading
+        heading = .last_heading
         try:
             orient = self.car.get_orientation()
             if orient and "yaw" in orient:
