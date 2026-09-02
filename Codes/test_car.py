@@ -51,7 +51,7 @@ mapper = MappingManager(
     ultrasonic=FakeUltrasonic(),
     vision=FakeVision() ,
     object_policy="avoid",
-    cruise_speed_mps=0.2,
+    cruise_speed=0.2,
 )
 
 mapper.start_mapping(width_m=4, height_m=5)
