@@ -44,7 +44,7 @@ gps = GPSManager()
 gps.start()
 
 mapper = MappingManager(
-    car=CarController(),
+    car=CarController(speed=0.2),
     arm=FakeArm(),
     gps=gps,
     imu=IMUManager(),
