@@ -40,10 +40,13 @@ class FakeArm:
         return None
 
 
+gps = GPSManager()
+gps.start()
+
 mapper = MappingManager(
     car=CarController(),
     arm=FakeArm(),
-    gps=GPSManager(),
+    gps=gps,
     imu=IMUManager(),
     ultrasonic=FakeUltrasonic(),
     vision=FakeVision() ,
