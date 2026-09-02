@@ -50,7 +50,7 @@ mapper = MappingManager(
     imu=IMUManager(),
     ultrasonic=FakeUltrasonic(),
     vision=FakeVision() ,
-    object_policy="avoid",
+    object_policy="ignore",
     cruise_speed=0.2,
 )
 
