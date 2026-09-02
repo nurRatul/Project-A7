@@ -53,7 +53,7 @@ mapper = MappingManager(
     object_policy="avoid"
 )
 
-mapper.start_mapping(width_m=1, height_m=1)
+mapper.start_mapping(width_m=4, height_m=5)
 
 while mapper.state not in ("COMPLETED", "ERROR"):
     mapper.tick()
