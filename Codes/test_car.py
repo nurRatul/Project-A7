@@ -44,13 +44,14 @@ gps = GPSManager()
 gps.start()
 
 mapper = MappingManager(
-    car=CarController(speed=0.2),
+    car=CarController(),
     arm=FakeArm(),
     gps=gps,
     imu=IMUManager(),
     ultrasonic=FakeUltrasonic(),
     vision=FakeVision() ,
-    object_policy="avoid"
+    object_policy="avoid",
+    cruise_speed_mps=0.2,
 )
 
 mapper.start_mapping(width_m=4, height_m=5)
