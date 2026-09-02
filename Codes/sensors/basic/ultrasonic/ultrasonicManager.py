@@ -160,7 +160,7 @@ class UltrasonicManager:
 
     Usage:
         ultrasonic = UltrasonicManager()   # auto_start=True by default
-        ... ultrasonic.get_telemetry() / ultrasonic.has_obstacle() ...
+        ... ultrasonic() / ultrasonic.has_obstacle() ...
         ultrasonic.close()
     """
 
