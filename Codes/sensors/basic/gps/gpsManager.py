@@ -1,6 +1,6 @@
 # gpsManager.py
 
-from math import atan2, radians, sqrt
+from math import atan2, radians, sqrt, sin, cos
 import os
 import time
 
