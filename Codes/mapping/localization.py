@@ -78,7 +78,7 @@ class PositionEstimator:
 
     # ---- setup ---------------------------------------------------------
 
-    def wait_for_fix(self, timeout=60.0):
+    def wait_for_fix(self, timeout=5.0):
         """Block until GPS has a usable fix, or raise TimeoutError. Call
         this during INITIALIZING before trusting local coordinates."""
         deadline = time.monotonic() + timeout
