@@ -1,5 +1,6 @@
 # gpsManager.py
 
+from math import atan2, radians, sqrt
 import os
 import time
 
@@ -40,6 +41,7 @@ class GPSManager:
 
         self.gps = NEOM8NGPS(port=port, baudrate=baudrate, timeout=timeout)
         self.tracker = GPSTracker(self.gps)
+        self.old_location = {'longitude': None, 'latitude': None}
 
         if auto_start:
             self.start()
@@ -103,6 +105,28 @@ class GPSManager:
 
     def has_fix(self):
         return self.tracker.snapshot()["has_fix"]
+
+    def distance_meters(self):
+        R = 6371000  # Earth radius in meters
+        lat1, lon1 = self.old_location['latitude'], self.old_location['longitude']
+        lat2, lon2 = self.get_location()
+
+        if lat1 is None or lon1 is None or lat2 is None or lon2 is None:
+            return None
+
+        dlat = radians(lat2 - lat1)
+        dlon = radians(lon2 - lon1)
+
+        a = (
+            sin(dlat / 2) ** 2
+            + cos(radians(lat1))
+            * cos(radians(lat2))
+            * sin(dlon / 2) ** 2
+        )
+
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return R * c
 
 
 if __name__ == "__main__":
