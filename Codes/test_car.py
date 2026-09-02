@@ -4,7 +4,7 @@ from Car.carController import CarController
 from sensors.basic.ultrasonic.ultrasonicManager import UltrasonicManager
 from sensors.basic.imu.imuManager import IMUManager
 from sensors.basic.gps.gpsManager import GPSManager
-from sensors.vision.visionManager import VisionManager
+# from sensors.vision.visionManager import VisionManager
 
 
 
