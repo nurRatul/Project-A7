@@ -7,17 +7,50 @@ from sensors.basic.gps.gpsManager import GPSManager
 from sensors.basic.vision.visionManager import VisionManager
 
 
+
+
+class FakeUltrasonic:
+    """Clear by default. Tests can set .front_m low to simulate an obstacle."""
+
+    def __init__(self):
+        self.front_m = 4.0
+        self.left_m = 4.0
+        self.right_m = 4.0
+
+    def get_telemetry(self):
+        return {"front_m": self.front_m, "left_m": self.left_m, "right_m": self.right_m,
+                "last_update": time.time()}
+
+    def has_obstacle(self, direction="front", threshold_m=None):
+        threshold = threshold_m if threshold_m is not None else 0.35
+        distance = {"front": self.front_m, "left": self.left_m, "right": self.right_m}[direction]
+        return distance is not None and distance < threshold
+
+
+class FakeVision:
+    def detect(self, frame=None):
+        return []
+
+    def read_frame(self):
+        return None
+
+
+class FakeArm:
+    def update(self, frame=None, detections=None):
+        return None
+
+
 mapper = MappingManager(
-    car=car_controller,
-    arm=arm_controller,
-    gps=gps_manager,
-    imu=imu_manager,
-    ultrasonic=ultrasonic_manager,
-    vision=vision_manager,
+    car=CarController(),
+    arm=FakeArm(),
+    gps=GPSManager(),
+    imu=IMUManager(),
+    ultrasonic=FakeUltrasonic(),
+    vision=FakeVision() ,
     object_policy="avoid"
 )
 
-mapper.start_mapping(width_m=5, height_m=7)
+mapper.start_mapping(width_m=1, height_m=1)
 
 while mapper.state not in ("COMPLETED", "ERROR"):
     mapper.tick()
