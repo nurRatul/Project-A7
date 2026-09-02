@@ -51,7 +51,9 @@ class GPSManager:
     def start(self):
         """Begin polling the GPS in a background daemon thread."""
         self.tracker.start()
-        self.old_location['latitude'], self.old_location['longitude'] = self.get_location()
+        (x,y) = self.get_location()
+        self.old_location['latitude'] = x
+        self.old_location['longitude'] = y
 
     def reset(self):
         """Reset the GPS tracker and clear the last known location."""
