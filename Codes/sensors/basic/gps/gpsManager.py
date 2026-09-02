@@ -51,14 +51,18 @@ class GPSManager:
     def start(self):
         """Begin polling the GPS in a background daemon thread."""
         self.tracker.start()
-        (x,y) = self.get_location()
-        self.old_location['latitude'] = x
-        self.old_location['longitude'] = y
-
+        time.sleep(0.5)  # let the first fix come in
+        location = self.get_location()
+        print(f"GPSManager started, first fix: {location}")
+        self.old_location['latitude'] = location[0]
+        self.old_location['longitude'] = location[1]
+   
     def reset(self):
         """Reset the GPS tracker and clear the last known location."""
         self.tracker.reset()
-        self.old_location['latitude'], self.old_location['longitude'] = self.get_location()
+        location = self.get_location()
+        self.old_location['latitude'] = location[0]
+        self.old_location['longitude'] = location[1]
 
     def stop(self):
         """Stop the background thread. The serial port stays open — start() again anytime."""
