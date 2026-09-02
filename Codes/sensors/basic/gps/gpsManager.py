@@ -59,7 +59,6 @@ class GPSManager:
    
     def reset(self):
         """Reset the GPS tracker and clear the last known location."""
-        self.tracker.reset()
         location = self.get_location()
         self.old_location['latitude'] = location[0]
         self.old_location['longitude'] = location[1]
