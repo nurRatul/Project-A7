@@ -4,7 +4,7 @@ from time import sleep
 #-----user defined------#
 from .btsMotor import BTSMotor
 from logger.logger_manager import LoggerManager
-from Car.sensors.basic.imu.imuManager import IMUManager
+
 
 logger = LoggerManager.get_logger('carController')
 

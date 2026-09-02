@@ -25,7 +25,7 @@ if __package__ in (None, ""):
 
 from Car.carController import CarController
 
-from Car.sensors.basic.gps.gpsManager import GPSManager
+from sensors.basic.gps.gpsManager import GPSManager
 
 car = CarController()
 gps = GPSManager(port="/dev/ttyAMA0", baudrate=9600, timeout=1.0)

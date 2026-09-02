@@ -54,7 +54,7 @@ if __package__ in (None, ""):
         sys.path.insert(0, str(here))
 
 from Car.carController import CarController
-from Car.sensors.basic.gps.gpsManager import GPSManager
+from sensors.basic.gps.gpsManager import GPSManager
 
 # ---------------------------------------------------------------------------
 # Defaults

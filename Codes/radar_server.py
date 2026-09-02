@@ -58,7 +58,7 @@ _hardware_available = False
 
 try:
     from Car.carController import CarController as _CC
-    from Car.sensors.basic.gps.gpsManager import GPSManager as _GM
+    from sensors.basic.gps.gpsManager import GPSManager as _GM
 
     CarController = _CC
     GPSManager = _GM
