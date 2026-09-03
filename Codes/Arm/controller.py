@@ -172,6 +172,12 @@ class Controller:
             print(f"Could not open Arduino serial port: {error}")
             self._serial = None
 
+    def home(self):
+        try:
+            self._serial.write(b'H0,90,20,90,90,73,20\n')
+        except serial.SerialException as error:
+            print(f"Failed to send to Arduino: {error}")
+            
 
     def send_to_arduino(self, base_angle, link1_angle, theta2):
         """
@@ -185,7 +191,7 @@ class Controller:
             print("Arduino serial port not open -- skipping send.")
             return
 
-        message = f"{base_angle:.2f},{link1_angle:.2f},{theta2:.2f}\n"
+        message=f'"P"{base_angle:.2f},{link1_angle:.2f},90,0,{theta2:.2f}\n,200\n"'
 
         try:
             self._serial.write(message.encode("utf-8"))
