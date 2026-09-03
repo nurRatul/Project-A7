@@ -47,11 +47,13 @@ class mappingManager:
                 time_covered =time_covered + (time.time() - starting)
                 if self.roverState.object_detected:
                     self.car_controller.stop()
-                    self.roverState.object_detected = False
                     self.car_controller.move_forward(deltaT=None, speed=speed)
+                    time.sleep(5) # wait for 5 seconds to pickup object. Here the arm code has to be implemented to pickup the object. After that the rover will continue to move forward.
+                self.roverState.object_detected = False
                 starting = time.time()
                 time.sleep(0.1)
                 print(f"\n\nTime covered: {time_covered:.2f} seconds")
+            self.car_controller.stop()
                 
 
             if i < math.ceil(y_direction):

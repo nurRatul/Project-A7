@@ -62,7 +62,7 @@ class Rover:
         while True:
             print("Monitor tick")
             if self.has_obstacle(threshold_m):
-                print("Obstacle detected!")
+                pass
             time.sleep(0.1)  # Adjust the sleep time as needed
 
 
