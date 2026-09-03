@@ -30,7 +30,7 @@ Install with: pip install gpiozero
 
 from gpiozero import DistanceSensor
 
-from .config import config as cfg
+from . import config as cfg
 
 
 class UltrasonicSensor:
