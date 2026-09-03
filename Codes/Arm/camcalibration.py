@@ -5,8 +5,8 @@ from picamera2 import Picamera2
 import config as cfg
 
 # Checkerboard settings
-CHECKERBOARD = (9, 6)
-SQUARE_SIZE_MM = 25.0 
+CHECKERBOARD = (7, 7)
+SQUARE_SIZE_MM = 18 
 
 # Termination criteria for sub-pixel accuracy
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
