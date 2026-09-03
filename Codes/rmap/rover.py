@@ -48,7 +48,7 @@ class Rover:
     def has_obstacle(self, threshold_m=None): ## put this code to the ultrasonicManager
         if threshold_m is None:
             threshold_m = self.hold_distance
-        distance = self.ultrasonic_sensor.read_mm()
+        distance = self.ultrasonic_sensor.read_mm() or 500
         print(f"Ultrasonic distance: {distance} mm, Threshold: {threshold_m} mm")
         if distance < threshold_m:
             self.roverState.object_detected = True
