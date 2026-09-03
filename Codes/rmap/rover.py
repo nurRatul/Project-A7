@@ -36,7 +36,7 @@ class Rover:
         self.gps_manager = GPSManager(port=gps_port, baudrate=gps_baudrate, timeout=gps_timeout)
         self.gps_manager.start()
         self.imu_manager = IMUManager()
-        self.ultrasonic_sensor = UltrasonicSensor()
+        self.ultrasonic_sensor = UltrasonicSensor(9,10,0,0)
         self.car_controller = CarController()
         self.roverState = RoverState()
         self.mapping_manager = mappingManager(self.roverState, self.gps_manager, self.imu_manager, self.ultrasonic_sensor, self.car_controller, gps_port, gps_baudrate, gps_timeout)
@@ -46,7 +46,7 @@ class Rover:
         self.thread.start()
 
     def has_obstacle(self, threshold_m=15): ## put this code to the ultrasonicManager
-        if self.ultrasonic_sensor.read_mm(9,10,0,0) < threshold_m:
+        if self.ultrasonic_sensor.read_mm() < threshold_m:
             self.roverState.object_detected = True
             return True
         return False
