@@ -36,20 +36,22 @@ class mappingManager:
         self.car_controller = car_controller or CarController()
 
     def cover_area_nogps(self, x_direction=2, y_direction=2, speed=0.2):
-        
+
         for i in range(1, math.ceil(y_direction)+1):
             deltaT = x_direction / speed
+            print(f"Moving forward for {deltaT} seconds at speed {speed}")
             time_covered = 0
             starting = time.time()
             self.car_controller.move_forward(deltaT=None, speed=speed)
             while time_covered < deltaT:
                 time_covered =time_covered + (time.time() - starting)
-                time.sleep(0.1)
-                starting = time.time()
                 if self.roverState.object_detected:
                     self.car_controller.stop()
                     self.roverState.object_detected = False
                     self.car_controller.move_forward(deltaT=None, speed=speed)
+                starting = time.time()
+                time.sleep(0.1)
+                print(f"\n\nTime covered: {time_covered:.2f} seconds")
                 
 
             if i < math.ceil(y_direction):
