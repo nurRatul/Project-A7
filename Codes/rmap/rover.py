@@ -32,7 +32,7 @@ class RoverState:
 
 
 class Rover:
-    def __init__(self, gps_port="/dev/ttyAMA0", gps_baudrate=9600, gps_timeout=1.0):
+    def __init__(self, gps_port="/dev/ttyAMA0", gps_baudrate=9600, gps_timeout=1.0, hold_distance=150):
         self.gps_manager = GPSManager(port=gps_port, baudrate=gps_baudrate, timeout=gps_timeout)
         self.gps_manager.start()
         self.imu_manager = IMUManager()
@@ -40,18 +40,23 @@ class Rover:
         self.car_controller = CarController()
         self.roverState = RoverState()
         self.mapping_manager = mappingManager(self.roverState, self.gps_manager, self.imu_manager, self.ultrasonic_sensor, self.car_controller, gps_port, gps_baudrate, gps_timeout)
+        self.hold_distance = hold_distance
 
         # --------------------------------------------#
-        self.thread = threading.Thread(target=self.monitor_ultrasonic, args=(15,), daemon=True)
+        self.thread = threading.Thread(target=self.monitor_ultrasonic, args=(hold_distance,), daemon=True)
         self.thread.start()
 
-    def has_obstacle(self, threshold_m=15): ## put this code to the ultrasonicManager
+    def has_obstacle(self, threshold_m=None): ## put this code to the ultrasonicManager
+        if threshold_m is None:
+            threshold_m = self.hold_distance
         if self.ultrasonic_sensor.read_mm() < threshold_m:
             self.roverState.object_detected = True
             return True
         return False
 
-    def monitor_ultrasonic(self, threshold_m=15):
+    def monitor_ultrasonic(self, threshold_m= None):
+        if threshold_m is None:
+            threshold_m = self.hold_distance
         while True:
             if self.has_obstacle(threshold_m):
                 print("Obstacle detected!")
