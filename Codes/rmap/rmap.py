@@ -36,9 +36,7 @@ class mappingManager:
         self.car_controller = car_controller or CarController()
 
     def cover_area_nogps(self, x_direction=2, y_direction=2, speed=0.2):
-        self.gps_manager.reset()
-        self.imu_manager.reset()
-
+        
         for i in range(1, math.ceil(y_direction)+1):
             deltaT = x_direction / speed
             time_covered = 0
@@ -63,6 +61,12 @@ class mappingManager:
                     self.car_controller.turn_left(speed=speed,angle=90)
                     self.car_controller.move_forward(deltaT=1, speed=speed)
                     self.car_controller.turn_left(speed=speed,angle=90)
+
+    def cover_area_gps(self, x_direction=2, y_direction=2, speed=0.2):
+        self.gps_manager.reset()
+        self.imu_manager.reset()
+        # implement the logic to cover the area using GPS and IMU data
+        pass
 
 
         
