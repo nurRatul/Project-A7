@@ -9,7 +9,7 @@ from picamera2 import Picamera2
 # ============================================================
 CHECKERBOARD = (7, 7)  # Internal corners (width, height)
 SQUARE_SIZE = 18.5     # Square size in mm
-REQUIRED_IMAGES = 15   # Captures required
+REQUIRED_IMAGES = 30   # Captures required
 IMAGE_WIDTH = 640
 IMAGE_HEIGHT = 480
 

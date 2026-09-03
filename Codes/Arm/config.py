@@ -45,8 +45,8 @@ BOTTLE_CLASS_ID = 39     # COCO class id for "bottle"
 # For real accuracy, run an actual camera calibration (e.g.
 # OpenCV's checkerboard/chessboard calibration routine) and replace
 # these four numbers with the real result.
-CAMERA_FX = 457.0
-CAMERA_FY = 461.0
+CAMERA_FX = 627
+CAMERA_FY = 627
 CAMERA_CX = IMAGE_WIDTH / 2
 CAMERA_CY = IMAGE_HEIGHT / 2
 # NOTE: CAMERA_FY and CAMERA_CY are not currently used anywhere in
@@ -59,18 +59,18 @@ CAMERA_CY = IMAGE_HEIGHT / 2
 # How far the camera is mounted to the side of the arm's J1
 # centerline, in mm. Positive = camera is to the right of J1.
 # This replaces "xo" from your old controller.py.
-CAMERA_X_OFFSET = 0.0   # ??? MEASURE if the camera isn't exactly on the arm's centerline
+CAMERA_X_OFFSET = -60   # ??? MEASURE if the camera isn't exactly on the arm's centerline
 
 
 # ------------------------------------------------------------
 # ARM
 # ------------------------------------------------------------
 
-LINK1 = 120.0   # mm, J1 -> J2   (was "L2" in your original ik.py)
-LINK2 = 133.0   # mm, J2 -> gripper mount   (was "L3" in your original ik.py)
+LINK1 = 110.0   # mm, J1 -> J2   (was "L2" in your original ik.py)
+LINK2 = 120.0   # mm, J2 -> gripper mount   (was "L3" in your original ik.py)
 
-J1_HEIGHT = 90.0         # mm, height of J1 above the ground
-GRIPPER_HEIGHT = 120.0   # mm, height of the gripper pickup point above the ground
+J1_HEIGHT = 95         # mm, height of J1 above the ground
+GRIPPER_HEIGHT = 130.0   # mm, height of the gripper pickup point above the ground
 
 # Derived -- don't edit this line directly, edit J1_HEIGHT /
 # GRIPPER_HEIGHT above instead and this updates automatically.
@@ -126,15 +126,15 @@ CENTER_SENSOR_X_OFFSET = 0.0    # assumed ~0 (on centerline) -- confirm/adjust
 RIGHT_SENSOR_X_OFFSET = None    # ??? MEASURE: mm, right of J1 centerline (positive)
 
 LEFT_SENSOR_Z_OFFSET = 0.0      # ??? MEASURE if this sensor isn't on the same front plane as J1
-CENTER_SENSOR_Z_OFFSET = 0.0    # ??? MEASURE if needed
+CENTER_SENSOR_Z_OFFSET = 70    # ??? MEASURE if needed
 RIGHT_SENSOR_Z_OFFSET = 0.0     # ??? MEASURE if needed
 
 # GPIO pins (BCM numbering) for each HC-SR04-style sensor. I don't
 # know how you've wired these -- please fill in:
 LEFT_SENSOR_TRIGGER_PIN = None     # ??? BCM pin number
 LEFT_SENSOR_ECHO_PIN = None        # ??? BCM pin number
-CENTER_SENSOR_TRIGGER_PIN = None   # ??? BCM pin number
-CENTER_SENSOR_ECHO_PIN = None      # ??? BCM pin number
+CENTER_SENSOR_TRIGGER_PIN = 9   # ??? BCM pin number
+CENTER_SENSOR_ECHO_PIN = 10  # ??? BCM pin number
 RIGHT_SENSOR_TRIGGER_PIN = None    # ??? BCM pin number
 RIGHT_SENSOR_ECHO_PIN = None       # ??? BCM pin number
 

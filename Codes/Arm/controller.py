@@ -2,7 +2,7 @@ import cv2
 import serial
 
 from .detector import BottleDetector
-from .ultrasonic import UltrasonicManager
+from .ultrasonic import UltrasonicManager, UltrasonicSensor
 from .ik import inverse_kinematics
 from . import config as cfg
 
@@ -54,8 +54,8 @@ class Controller:
             camera_id=camera_id
         )
 
-        self.ultrasonic = UltrasonicManager()
-
+        # self.ultrasonic = UltrasonicManager()    #for three ultrasonic
+        self.ultrasonic= UltrasonicSensor()
         self._serial = None
 
         if self.enable_motion:
@@ -320,9 +320,14 @@ class Controller:
         # read it, and get Z relative to the arm.
         # ====================================================
 
-        direction, raw_mm, z_arm = self.ultrasonic.measure(px)
-
+        #direction, raw_mm, z_arm = self.ultrasonic.measure(px)   #for three ults
+        #----------------------------for one ultrasonic----------------#
+        direction="CENTER"
+        raw_mm= self.ultrasonic.read_mm
+        z_arm= raw_mm+cfg.CENTER_SENSOR_Z_OFFSET
         self.direction = direction
+
+        #--------------------------------------------#
 
         if z_arm is None:
 
@@ -514,7 +519,7 @@ class Controller:
 
         self.detector.release()
 
-        self.ultrasonic.close()
+        #self.ultrasonic.close()  #for three ults
 
         if self._serial is not None:
             self._serial.close()
