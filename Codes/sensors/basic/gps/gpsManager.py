@@ -53,9 +53,14 @@ class GPSManager:
         self.tracker.start()
         time.sleep(0.5)  # let the first fix come in
         location = self.get_location()
-        print(f"GPSManager started, first fix: {location}")
-        self.old_location['latitude'] = location[0]
-        self.old_location['longitude'] = location[1]
+        try:
+            print(f"GPSManager started, first fix: {location}")
+            self.old_location['latitude'] = location[0]
+            self.old_location['longitude'] = location[1]
+        except Exception as e:
+            print(f"GPSManager started, but no fix yet: {e}")
+            self.old_location['latitude'] = None
+            self.old_location['longitude'] = None
    
     def reset(self):
         """Reset the GPS tracker and clear the last known location."""
