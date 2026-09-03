@@ -42,7 +42,7 @@ commands = [
 for _ in range(2):
     for func, deltaT, speed in commands:
         func(deltaT=deltaT, speed=speed)
-        print(gps.get_location())
+        print(f'{gps.get_location()} and moved {gps.distance_meters()} meters since last command')
         #print(gps.get_telemetry())
 
 gps.stop()
