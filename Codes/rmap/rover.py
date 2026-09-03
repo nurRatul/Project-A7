@@ -1,5 +1,4 @@
 from Car.carController import CarController
-from rmap.rmap import RoverState
 from sensors.basic.gps.gpsManager import GPSManager
 from sensors.basic.imu.imuManager import IMUManager
 from sensors.basic.ultrasonic.ultrasonic import UltrasonicSensor
@@ -49,7 +48,9 @@ class Rover:
     def has_obstacle(self, threshold_m=None): ## put this code to the ultrasonicManager
         if threshold_m is None:
             threshold_m = self.hold_distance
-        if self.ultrasonic_sensor.read_mm() < threshold_m:
+        distance = self.ultrasonic_sensor.read_mm()
+        print(f"Ultrasonic distance: {distance} mm, Threshold: {threshold_m} mm")
+        if distance < threshold_m:
             self.roverState.object_detected = True
             return True
         return False
@@ -57,7 +58,9 @@ class Rover:
     def monitor_ultrasonic(self, threshold_m= None):
         if threshold_m is None:
             threshold_m = self.hold_distance
+        print("Monitor thread started")
         while True:
+            print("Monitor tick")
             if self.has_obstacle(threshold_m):
                 print("Obstacle detected!")
             time.sleep(0.1)  # Adjust the sleep time as needed
