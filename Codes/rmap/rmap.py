@@ -45,6 +45,7 @@ class mappingManager:
             self.car_controller.move_forward(deltaT=None, speed=speed)
             while time_covered < deltaT:
                 time_covered =time_covered + (time.time() - starting)
+                print(self.roverState.object_detected)
                 if self.roverState.object_detected:
                     self.car_controller.stop()
                     self.car_controller.move_forward(deltaT=None, speed=speed)
