@@ -63,9 +63,9 @@ class mappingManager:
                     self.car_controller.move_forward(deltaT=1, speed=speed)
                     self.car_controller.turn_right(speed=speed,angle=90)
                 else:
-                    self.car_controller.turn_left(speed=speed,angle=90)
+                    self.car_controller.turn_left(speed=speed,angle=85)
                     self.car_controller.move_forward(deltaT=1, speed=speed)
-                    self.car_controller.turn_left(speed=speed,angle=90)
+                    self.car_controller.turn_left(speed=speed,angle=85)
 
     def cover_area_gps(self, x_direction=2, y_direction=2, speed=0.2):
         self.gps_manager.reset()
