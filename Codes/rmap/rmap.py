@@ -48,8 +48,8 @@ class mappingManager:
                 print(self.roverState.object_detected)
                 if self.roverState.object_detected:
                     self.car_controller.stop()
-                    self.car_controller.move_forward(deltaT=None, speed=speed)
                     time.sleep(5) # wait for 5 seconds to pickup object. Here the arm code has to be implemented to pickup the object. After that the rover will continue to move forward.
+                    self.car_controller.move_forward(deltaT=None, speed=speed)
                 self.roverState.object_detected = False
                 starting = time.time()
                 time.sleep(0.1)

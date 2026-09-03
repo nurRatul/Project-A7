@@ -49,8 +49,8 @@ class Rover:
         if threshold_m is None:
             threshold_m = self.hold_distance
         distance = self.ultrasonic_sensor.read_mm() or 500
-        print(f"Ultrasonic distance: {distance} mm, Threshold: {threshold_m} mm")
-        if distance < threshold_m:
+        # print(f"Ultrasonic distance: {distance} mm, Threshold: {threshold_m} mm")
+        if int(distance) < int(threshold_m):
             self.roverState.object_detected = True
             return True
         return False
@@ -60,7 +60,7 @@ class Rover:
             threshold_m = self.hold_distance
         print("Monitor thread started")
         while True:
-            print("Monitor tick")
+            # print("Monitor tick")
             if self.has_obstacle(threshold_m):
                 pass
             time.sleep(0.1)  # Adjust the sleep time as needed
