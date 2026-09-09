@@ -5,7 +5,7 @@ import os
 
 
 
-arm = serial.Serial('COM6', 115200, timeout=5)
+arm = serial.Serial('/dev/ttyACM1', 115200, timeout=5)
 print("Initializing arm") 
 time.sleep(2)
 arm.write(b'H0,90,20,90,90,73,20\n')  #home the arm at low speeds
