@@ -21,10 +21,10 @@ def write_arduino(angles):
     angle_string="P"+angle_string+",200\n"    
     print(angle_string)
     arm.write(angle_string.encode())          #.encode encodes the string to bytes
+    arm.flush()
+
+    reply = arm.readline().decode(errors="ignore").strip()
+    print("Arduino:", reply)
             
 
-write_arduino([150,15,0,0,90,73])  #home the arm at low speeds
-arm.flush()
-
-reply = arm.readline().decode(errors="ignore").strip()
-print("Arduino:", reply)
+write_arduino([0,15,0,0,90,73])  #home the arm at low speeds
