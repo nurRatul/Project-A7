@@ -28,3 +28,8 @@ def write_arduino(angles):
             
 
 write_arduino([0,15,0,0,90,73])  #home the arm at low speeds
+
+
+for i in range(0,181,20):
+   write_arduino([i,i,i,i,i,i])
+   time.sleep(.5)
