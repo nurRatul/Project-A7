@@ -5,7 +5,7 @@ import os
 
 
 
-arm = serial.Serial('/dev/ttyACM1', 115200, timeout=5)
+arm = serial.Serial('/dev/ttyACM0', 115200, timeout=5)
 print("Initializing arm") 
 time.sleep(2)
 arm.write(b'H0,90,20,90,90,73,20\n')  #home the arm at low speeds
@@ -27,9 +27,14 @@ def write_arduino(angles):
     print("Arduino:", reply)
             
 
-write_arduino([0,15,0,0,90,73])  #home the arm at low speeds
+write_arduino([0,130,0,0,90,73])  #home the arm at low speeds
 
 
 for i in range(0,181,20):
    write_arduino([i,i,i,i,i,i])
+   time.sleep(.5)
+
+   
+for i in range(0,181,20):
+   write_arduino([0,130,0,0,90,i])
    time.sleep(.5)
