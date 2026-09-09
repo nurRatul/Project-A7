@@ -3,9 +3,11 @@ from Arm import Controller
 
 controller = Controller(
     show_video=True,
-    debug=True
+    debug=True,
+    enable_motion=True
 )
 
+controller.home()
 
 try:
 
