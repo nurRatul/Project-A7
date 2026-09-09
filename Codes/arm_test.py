@@ -24,3 +24,7 @@ def write_arduino(angles):
             
 
 write_arduino([150,15,0,0,90,73])  #home the arm at low speeds
+arm.flush()
+
+reply = arm.readline().decode(errors="ignore").strip()
+print("Arduino:", reply)
