@@ -1,11 +1,12 @@
 import serial
 import time
 import os
+import random
 
 
 
 
-arm = serial.Serial('/dev/ttyACM0', 115200, timeout=5)
+arm = serial.Serial('/dev/ttyACM1', 115200, timeout=5)
 print("Initializing arm") 
 time.sleep(2)
 arm.write(b'H0,90,20,90,90,73,20\n')  #home the arm at low speeds
@@ -54,3 +55,16 @@ write_arduino([60,110,110,180,0,100])
 time.sleep(.25)
 
 #<---------------####
+
+write_arduino([60,110,110,0,80,10])
+time.sleep(2)
+while True:
+   x= random.randint(90,120)
+   y= random.randint(10,90)
+
+   t=x-y+90-15
+   # t=t if t<=120 else 120
+    
+   write_arduino([60,x,y,0,t,10])
+   time.sleep(2)
+   
