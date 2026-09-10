@@ -32,7 +32,7 @@ IMAGE_HEIGHT = 480
 
 YOLO_CONFIDENCE = 0.50   # was named CONFIDENCE in your original detector.py
 
-BOTTLE_CLASS_ID = 1     # COCO class id for "bottle"
+BOTTLE_CLASS_ID = 3     # COCO class id for "bottle"
 
 # Camera calibration (pinhole model).
 #
