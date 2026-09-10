@@ -6,7 +6,7 @@ controller = Controller(
     debug=True,
     enable_motion=True
 )
-
+controller._open_serial()
 controller.home()
 
 try:
