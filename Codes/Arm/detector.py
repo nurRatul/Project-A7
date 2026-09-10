@@ -19,24 +19,23 @@ class BottleDetector:
 
         # Initialize Raspberry Pi Camera Module via Picamera2
         self.camera = Picamera2()
-        camera_config = self.camera.create_preview_configuration(
+
+        # Create video configuration using native BGR format for OpenCV & YOLO
+        camera_config = self.camera.create_video_configuration(
             main={
-                "format": "RGB888",
+                "format": "BGR888",
                 "size": (cfg.IMAGE_WIDTH, cfg.IMAGE_HEIGHT)
             }
         )
         self.camera.configure(camera_config)
         self.camera.start()
 
-    def read_frame(self):
-        # Captures directly as a NumPy array (RGB)
-        frame_rgb = self.camera.capture_array()
-        if frame_rgb is None:
-            return None
+        # Enable Continuous Autofocus (AfMode: 2)
+        self.camera.set_controls({"AfMode": 2})
 
-        # Convert RGB to BGR for standard OpenCV rendering and inference
-        #frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
-        return frame_rgb
+    def read_frame(self):
+        # Captures directly as a native BGR NumPy array (zero conversion overhead)
+        return self.camera.capture_array()
 
     def detect(self, frame):
         results = self.model(
@@ -127,3 +126,4 @@ class BottleDetector:
 
     def release(self):
         self.camera.stop()
+        self.camera.close()
