@@ -59,7 +59,7 @@ CAMERA_CY = IMAGE_HEIGHT / 2
 # How far the camera is mounted to the side of the arm's J1
 # centerline, in mm. Positive = camera is to the right of J1.
 # This replaces "xo" from your old controller.py.
-CAMERA_X_OFFSET = -60   # ??? MEASURE if the camera isn't exactly on the arm's centerline
+CAMERA_X_OFFSET = -5 # ??? MEASURE if the camera isn't exactly on the arm's centerline
 
 
 # ------------------------------------------------------------
