@@ -11,7 +11,8 @@ for i in range (0,10):
    except serial.SerialException as e:
       print(f"Error opening serial port: {e}")
       time.sleep(1)
-      exit(1)
+if not arm:
+   exit(1)
 
 
 print("Initializing arm") 
