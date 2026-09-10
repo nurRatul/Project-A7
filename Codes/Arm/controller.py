@@ -54,7 +54,7 @@ class Controller:
         self.detector = BottleDetector()
 
         # self.ultrasonic = UltrasonicManager()    #for three ultrasonic
-        self.ultrasonic= UltrasonicSensor()
+        self.ultrasonic= UltrasonicSensor(cfg.CENTER_SENSOR_TRIGGER_PIN, cfg.CENTER_SENSOR_ECHO_PIN,cfg.CENTER_SENSOR_X_OFFSET,cfg.CENTER_SENSOR_Z_OFFSET)  #for one ultrasonic
         self._serial = None
 
         if self.enable_motion:
