@@ -23,7 +23,7 @@ full list of what to fill in.
 # CAMERA
 # ------------------------------------------------------------
 
-MODEL_PATH = "yolo26n.pt"
+MODEL_PATH = "final.pt"
 
 CAMERA_ID = 0
 
@@ -32,7 +32,7 @@ IMAGE_HEIGHT = 480
 
 YOLO_CONFIDENCE = 0.50   # was named CONFIDENCE in your original detector.py
 
-BOTTLE_CLASS_ID = 39     # COCO class id for "bottle"
+BOTTLE_CLASS_ID = 1     # COCO class id for "bottle"
 
 # Camera calibration (pinhole model).
 #
@@ -69,8 +69,8 @@ CAMERA_X_OFFSET = -60   # ??? MEASURE if the camera isn't exactly on the arm's c
 LINK1 = 110.0   # mm, J1 -> J2   (was "L2" in your original ik.py)
 LINK2 = 120.0   # mm, J2 -> gripper mount   (was "L3" in your original ik.py)
 
-J1_HEIGHT = 95         # mm, height of J1 above the ground
-GRIPPER_HEIGHT = 130.0   # mm, height of the gripper pickup point above the ground
+J1_HEIGHT = 86         # mm, height of J1 above the ground
+GRIPPER_HEIGHT = 105.0   # mm, height of the gripper pickup point above the ground
 
 # Derived -- don't edit this line directly, edit J1_HEIGHT /
 # GRIPPER_HEIGHT above instead and this updates automatically.
@@ -162,5 +162,5 @@ ULTRASONIC_MAX_VALID_MM = 400.0
 # no actual serial link) -- so there was nothing for me to preserve
 # here. This is new. Confirm both values match your Arduino sketch.
 ARDUINO_SERIAL_PORT = None    # ??? e.g. "/dev/ttyUSB0" or "/dev/ttyACM0" -- check with `ls /dev/tty*` on the Pi
-ARDUINO_BAUD_RATE = 9600      # ??? must match Serial.begin(...) in your Arduino sketch
-ARDUINO_SERIAL_TIMEOUT_S = 1.0
+ARDUINO_BAUD_RATE = 115200     # ??? must match Serial.begin(...) in your Arduino sketch
+ARDUINO_SERIAL_TIMEOUT_S = 2.0

@@ -1,5 +1,6 @@
 import cv2
 import serial
+import time
 
 from .detector import BottleDetector
 from .ultrasonic import UltrasonicManager, UltrasonicSensor
@@ -159,7 +160,14 @@ class Controller:
                 "ARDUINO_SERIAL_PORT is not set in config.py -- "
                 "cannot open a connection to the Arduino."
             )
-            self._serial = None
+            for i in range (0,10):
+                try:
+                    self._serial = serial.Serial(f'/dev/ttyACM{i}', cfg.ARDUINO_BAUD_RATE, timeout=cfg.ARDUINO_SERIAL_TIMEOUT_S)
+                    break
+                except serial.SerialException as e:
+                    print(f"Error opening serial port: {e}")
+                    time.sleep(1)
+                    self._serial = None
             return
 
         try:
