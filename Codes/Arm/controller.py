@@ -1,3 +1,4 @@
+from Codes.arm_test import write_arduino
 import cv2
 import serial
 import time
@@ -206,6 +207,29 @@ class Controller:
             self._serial.write(message.encode("utf-8"))
         except serial.SerialException as error:
             print(f"Failed to send to Arduino: {error}")
+
+    def write_arduino(angles):
+        angle_string=','.join([str(elem) for elem in angles])  # join the list values togheter
+        angle_string="P"+angle_string+",100\n"    
+        print(angle_string)
+        arm.write(angle_string.encode())          #.encode encodes the string to bytes
+        arm.flush()
+
+        reply = arm.readline().decode(errors="ignore").strip()
+        print("Arduino:", reply)
+
+
+    def dump_garbage_w1(self):
+        self.write_arduino([60,110,110,0,90,100])
+        time.sleep(2)
+        self.write_arduino([60,110,110,0,90,10])
+        time.sleep(.25)
+        self.write_arduino([60,170,60,180,180,10])
+        time.sleep(.25)
+        self.write_arduino([60,170,60,180,180,100])
+        time.sleep(.25)
+        self.write_arduino([60,110,110,0,0,100])
+        time.sleep(.25)
 
 
     # ========================================================

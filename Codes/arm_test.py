@@ -23,9 +23,6 @@ time.sleep(2)
 
 
 def write_arduino(angles):
-    
-    # angles[0]=180-angles[0]  #invert degrees for base
-    # angles[3]=180-angles[3]  #invert degrees for base
     angle_string=','.join([str(elem) for elem in angles])  # join the list values togheter
     angle_string="P"+angle_string+",100\n"    
     print(angle_string)
@@ -51,15 +48,15 @@ for i in range(15,61,5):
 
 # Grabbing magic------->
 
-write_arduino([60,110,110,180,0,100])
+write_arduino([60,110,110,0,90,100])
 time.sleep(2)
-write_arduino([60,110,110,180,0,10])
+write_arduino([60,110,110,0,90,10])
 time.sleep(.25)
 write_arduino([60,170,60,180,180,10])
 time.sleep(.25)
 write_arduino([60,170,60,180,180,100])
 time.sleep(.25)
-write_arduino([60,110,110,180,0,100])
+write_arduino([60,110,110,0,0,100])
 time.sleep(.25)
 
 #<---------------####
