@@ -205,14 +205,14 @@ class Controller:
         except serial.SerialException as error:
             print(f"Failed to send to Arduino: {error}")
 
-    def write_arduino(angles):
+    def write_arduino(self,angles):
         angle_string=','.join([str(elem) for elem in angles])  # join the list values togheter
         angle_string="P"+angle_string+",100\n"    
         print(angle_string)
-        arm.write(angle_string.encode())          #.encode encodes the string to bytes
-        arm.flush()
+        self._serial.write(angle_string.encode())          #.encode encodes the string to bytes
+        self._serial.flush()
 
-        reply = arm.readline().decode(errors="ignore").strip()
+        reply = self._serial.readline().decode(errors="ignore").strip()
         print("Arduino:", reply)
 
 
