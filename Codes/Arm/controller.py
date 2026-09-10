@@ -1,4 +1,3 @@
-from Codes.arm_test import write_arduino
 import cv2
 import serial
 import time
