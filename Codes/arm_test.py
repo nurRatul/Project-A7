@@ -4,7 +4,7 @@ import os
 import random
 
 
-for i in range (1,10):
+for i in range (0,10):
    try:
       arm = serial.Serial(f'/dev/ttyACM{i}', 115200, timeout=5)
       break

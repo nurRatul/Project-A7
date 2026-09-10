@@ -179,7 +179,7 @@ class Controller:
             print(f"Failed to send to Arduino: {error}")
             
 
-    def send_to_arduino(self, base_angle, link1_angle, theta2):
+    def send_to_arduino(self, base_angle, link1_angle, link2_angle):
         """
         Sends the three servo angles to the Arduino as one
         comma-separated line, e.g.:
@@ -191,7 +191,8 @@ class Controller:
             print("Arduino serial port not open -- skipping send.")
             return
 
-        message=f'"P"{base_angle:.2f},{link1_angle:.2f},90,0,{theta2:.2f}\n,200\n"'
+        # message=f'"P"{base_angle:.2f},{link1_angle:.2f},90,0,{theta2:.2f}\n,200\n"'
+        message=f'"P"{int(base_angle)},{int(link1_angle)},{int(link2_angle)},0,{int(link1_angle)-int(link2_angle)+90},100,200\n"' ## int(link1_angle)-int(link2_angle)+90 for keeping the grabber downward always
 
         try:
             self._serial.write(message.encode("utf-8"))

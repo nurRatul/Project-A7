@@ -167,7 +167,7 @@ def inverse_kinematics(x_arm, z_arm):
     # ========================================================
 
     theta2 = link2_angle + math.pi / 2
-
+    theta2 = link1_angle - link2_angle + math.pi / 2
     # ========================================================
     # STEP 10 -- return only what the physical motors need
     # ========================================================
