@@ -48,15 +48,15 @@ for i in range(15,61,5):
 
 # Grabbing magic------->
 
-write_arduino([60,110,110,0,90,100])
+write_arduino([60,80,100,0,90+80-100,100])
 time.sleep(2)
-write_arduino([60,110,110,0,90,10])
+write_arduino([60,80,100,0,90+80-100,10])
 time.sleep(.25)
-write_arduino([60,170,60,180,180,10])
+write_arduino([60,170,10,180,90,10])
 time.sleep(.25)
-write_arduino([60,170,60,180,180,100])
+write_arduino([60,170,30,180,90,100])
 time.sleep(.25)
-write_arduino([60,110,110,0,0,100])
+write_arduino([60,110,110,0,90+110-110,100])
 time.sleep(.25)
 
 #<---------------####

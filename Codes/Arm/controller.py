@@ -220,15 +220,15 @@ class Controller:
 
 
     def dump_garbage_w1(self):
-        self.write_arduino([60,110,110,0,90,100])
+        self.write_arduino([60,80,100,0,90+80-100,100])
         time.sleep(2)
-        self.write_arduino([60,110,110,0,90,10])
+        self.write_arduino([60,80,100,0,90+80-100,10])
         time.sleep(.25)
-        self.write_arduino([60,170,60,180,180,10])
+        self.write_arduino([60,170,10,180,90,10])
         time.sleep(.25)
-        self.write_arduino([60,170,60,180,180,100])
+        self.write_arduino([60,170,30,180,90,100])
         time.sleep(.25)
-        self.write_arduino([60,110,110,0,0,100])
+        self.write_arduino([60,110,110,0,90+110-110,100])
         time.sleep(.25)
 
 
