@@ -353,8 +353,8 @@ class Controller:
         #direction, raw_mm, z_arm = self.ultrasonic.measure(px)   #for three ults
         #----------------------------for one ultrasonic----------------#
         direction="CENTER"
-        raw_mm= self.ultrasonic.read_mm
-        z_arm= raw_mm+cfg.CENTER_SENSOR_Z_OFFSET
+        raw_mm= self.ultrasonic.read_mm()
+        z_arm= raw_mm+cfg.CENTER_SENSOR_Z_OFFSET if raw_mm not None else None
         self.direction = direction
 
         #--------------------------------------------#
