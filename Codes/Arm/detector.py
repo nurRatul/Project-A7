@@ -35,8 +35,8 @@ class BottleDetector:
             return None
 
         # Convert RGB to BGR for standard OpenCV rendering and inference
-        frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
-        return frame_bgr
+        #frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
+        return frame_rgb
 
     def detect(self, frame):
         results = self.model(
