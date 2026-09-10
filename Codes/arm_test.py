@@ -4,9 +4,16 @@ import os
 import random
 
 
+for i in range (1,10):
+   try:
+      arm = serial.Serial(f'/dev/ttyACM{i}', 115200, timeout=5)
+      break
+   except serial.SerialException as e:
+      print(f"Error opening serial port: {e}")
+      time.sleep(1)
+      exit(1)
 
 
-arm = serial.Serial('/dev/ttyACM1', 115200, timeout=5)
 print("Initializing arm") 
 time.sleep(2)
 arm.write(b'H0,90,20,90,90,73,20\n')  #home the arm at low speeds
