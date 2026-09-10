@@ -51,9 +51,7 @@ class Controller:
 
         self.window_name = "Rover Controller"
 
-        self.detector = BottleDetector(
-            camera_id=camera_id
-        )
+        self.detector = BottleDetector()
 
         # self.ultrasonic = UltrasonicManager()    #for three ultrasonic
         self.ultrasonic= UltrasonicSensor()
