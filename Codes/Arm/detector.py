@@ -9,6 +9,8 @@ sys.path.append(str(Path(__file__).resolve().parent))
 import config as cfg
 
 
+
+
 class BottleDetector:
 
     def __init__(
@@ -22,11 +24,12 @@ class BottleDetector:
 
         # Create video configuration using native BGR format for OpenCV & YOLO
         camera_config = self.camera.create_video_configuration(
-            main={
-                "format": "BGR888",
-                "size": (cfg.IMAGE_WIDTH, cfg.IMAGE_HEIGHT)
-            }
-        )
+                main={
+                    "format": "BGR888",
+                    "size": (cfg.IMAGE_WIDTH, cfg.IMAGE_HEIGHT)
+                },
+                buffer_count=2  # Minimizes DMA RAM consumption
+            )
         self.camera.configure(camera_config)
         self.camera.start()
 
@@ -54,8 +57,8 @@ class BottleDetector:
                 class_id = int(box.cls[0])
                 confidence = float(box.conf[0])
 
-                if class_id != cfg.BOTTLE_CLASS_ID:
-                    continue
+                # if class_id != cfg.BOTTLE_CLASS_ID:
+                #     continue
 
                 x1, y1, x2, y2 = box.xyxy[0].cpu().numpy()
 
@@ -104,7 +107,7 @@ class BottleDetector:
 
             cv2.putText(
                 frame,
-                f"bottle {confidence:.2f}",
+                f"{detection["class_name"]} {confidence:.2f}",
                 (x1, max(y1 - 10, 20)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 0.6,

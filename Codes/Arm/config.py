@@ -23,16 +23,16 @@ full list of what to fill in.
 # CAMERA
 # ------------------------------------------------------------
 
-MODEL_PATH = "final.pt"
+MODEL_PATH = "yolo26n.pt"
 
 CAMERA_ID = 0
 
-IMAGE_WIDTH = 1920
-IMAGE_HEIGHT = 1080
+IMAGE_WIDTH = 1280
+IMAGE_HEIGHT = 720
 
 YOLO_CONFIDENCE = 0.25   # was named CONFIDENCE in your original detector.py
 
-BOTTLE_CLASS_ID = 3     # COCO class id for "bottle"
+BOTTLE_CLASS_ID = 39    # COCO class id for "bottle"
 
 # Camera calibration (pinhole model).
 #
@@ -60,7 +60,7 @@ CAMERA_CY = IMAGE_HEIGHT / 2
 # centerline, in mm. Positive = camera is to the right of J1.
 # This replaces "xo" from your old controller.py.
 CAMERA_X_OFFSET = -5 # ??? MEASURE if the camera isn't exactly on the arm's centerline
-
+CAMERA_Y_OFFSET = 10
 
 # ------------------------------------------------------------
 # ARM

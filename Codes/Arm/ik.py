@@ -62,7 +62,7 @@ def clamp(value, minimum, maximum):
     return max(minimum, min(value, maximum))
 
 
-def inverse_kinematics(x_arm, z_arm):
+def inverse_kinematics(x_arm,y_arm, z_arm):
     """
     x_arm, z_arm: position of the trash relative to the arm's J1
     origin, in mm (X = left/right, Z = forward). Y is not a
@@ -92,7 +92,7 @@ def inverse_kinematics(x_arm, z_arm):
     # STEP 3 -- target height relative to J1 (fixed, ground pickup)
     # ========================================================
 
-    H = cfg.TARGET_HEIGHT
+    H = cfg.TARGET_HEIGHT + y_arm if not y_arm is None else cfg.TARGET_HEIGHT
 
     # ========================================================
     # STEP 4 -- distance from J1 to the target point
@@ -155,6 +155,7 @@ def inverse_kinematics(x_arm, z_arm):
     link2_y = H - link1_y
 
     link2_angle = math.atan2(link2_y, link2_x)
+    
 
     # ========================================================
     # STEP 9 -- theta2: convert to your downward-zero convention
@@ -167,13 +168,14 @@ def inverse_kinematics(x_arm, z_arm):
     # ========================================================
 
     theta2 = link2_angle + math.pi / 2
-    theta2 = link1_angle - link2_angle + math.pi / 2
+    theta2 = link1_angle - abs(link2_angle) + math.pi / 2
     # ========================================================
     # STEP 10 -- return only what the physical motors need
     # ========================================================
+    print(f'hello {math.degrees(theta2)}')
 
     return {
-        "base_angle": round(math.degrees(base_angle), 2),
+        "base_angle": -round(math.degrees(base_angle)+30, 2),
         "link1_angle": round(math.degrees(link1_angle), 2),
         "theta2": round(math.degrees(theta2), 2),
         "R": round(R, 2),

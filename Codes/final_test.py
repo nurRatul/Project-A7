@@ -18,7 +18,7 @@ try:
         if angles is not None:
 
             print("ARM ANGLES:", angles)
-            #controller.write_arduino([angles[0]])
+            controller.write_arduino([angles[0], angles[1], angles[2], 0, angles[1]-angles[2]+90, 100])
 
             # Your arm code here
             # arm.move(angles)

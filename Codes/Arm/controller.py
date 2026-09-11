@@ -67,6 +67,7 @@ class Controller:
         self.detection = None
         self.direction = None
         self.x_arm = None
+        self.y_arm = None
         self.z_arm = None
         self.ik_result = None
 
@@ -101,6 +102,26 @@ class Controller:
 
         return camera_x, x_arm
 
+    def pixel_to_lateral_y(self, py,z_arm):
+            """
+            Standard calibrated pinhole conversion, using the depth
+            already determined by the ultrasonic sensor as Z_camera:
+    
+                X_camera = (px - cx) * Z / fx
+    
+            then shifted by the camera's own mounting offset from the
+            arm to get X relative to the arm's J1 origin.
+    
+            Returns (camera_x, x_arm) -- both are printed in debug
+            mode since your test-mode list asks for each separately.
+            """
+    
+            camera_y = (py - cfg.CAMERA_CY) * z_arm / cfg.CAMERA_FY
+    
+            y_arm = camera_y + cfg.CAMERA_Y_OFFSET
+    
+            return camera_y, y_arm
+    
 
     # ========================================================
     # SERVO CALIBRATION
@@ -198,10 +219,12 @@ class Controller:
             return
 
         # message=f'"P"{base_angle:.2f},{link1_angle:.2f},90,0,{theta2:.2f}\n,200\n"'
-        message=f'"P"{int(base_angle)},{int(link1_angle)},{int(link2_angle)},0,{int(link1_angle)-int(link2_angle)+90},100,200\n"' ## int(link1_angle)-int(link2_angle)+90 for keeping the grabber downward always
+        # message=f'"P"{int(base_angle)},{int(link1_angle)},{int(link2_angle)},0,{int(link1_angle)-int(link2_angle)+90},100,200\n"' ## int(link1_angle)-int(link2_angle)+90 for keeping the grabber downward always
 
         try:
-            self._serial.write(message.encode("utf-8"))
+            # self._serial.write(message.encode("utf-8"))
+            # self.write_arduino([int(base_angle),int(link1_angle),int(link2_angle),0,int(link1_angle)-int(link2_angle)+90,100])
+            self.write_arduino([int(base_angle),0,0,0,0,100])
         except serial.SerialException as error:
             print(f"Failed to send to Arduino: {error}")
 
@@ -309,7 +332,7 @@ class Controller:
 
                 cv2.putText(
                     frame,
-                    "No bottle",
+                    "Nothing found yet",
                     (20, 30),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.7,
@@ -331,7 +354,7 @@ class Controller:
 
 
         # ====================================================
-        # FIRST BOTTLE
+        # FIRST Object
         # ====================================================
 
         self.detection = detections[0]
@@ -409,6 +432,13 @@ class Controller:
         self.x_arm = x_arm
         self.z_arm = z_arm
 
+        camera_y, y_arm = self.pixel_to_lateral_y(
+            py,
+            z_arm
+        )
+
+        self.y_arm = y_arm
+
 
         # ====================================================
         # IK
@@ -418,6 +448,7 @@ class Controller:
 
             self.ik_result = inverse_kinematics(
                 x_arm,
+                y_arm,
                 z_arm
             )
 
