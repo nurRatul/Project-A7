@@ -15,7 +15,7 @@ class CarController:
         self,
         left_pins=None,
         right_pins=None,
-        imu = None,   # IMUManager
+        imu_manager = None,   # IMUManager
     ):
         left_pins = left_pins or self._pins_from_environment(
             "CAR_LEFT_PINS",
@@ -33,14 +33,14 @@ class CarController:
         self.frame = None
         self.detections = []
 
-        if imu is None:
+        if imu_manager is None:
             try:
                 self.imu = IMUManager()
             except Exception as e:
                 logger.exception("Failed to initialize IMU: %s", e)
                 self.imu = None
         else:
-            self.imu = imu
+            self.imu = imu_manager
 
     @staticmethod
     def _pins_from_environment(name, default):
@@ -167,6 +167,17 @@ class CarController:
     def stop(self):         ## Stopes the both motors
         self.left_motor.stop()
         self.right_motor.stop()
+
+    def pitch_to_speed(self, pitch=None,min_speed=0.1, max_speed=1.0):
+        if pitch is None:
+            orientation = self.get_orientation()
+            if orientation is None:
+                return min_speed
+            pitch = orientation["pitch"]
+
+        # Map pitch to speed
+        speed = min_speed + (pitch / 90.0) * (max_speed - min_speed)
+        return max(-max_speed, min(max_speed, speed))
 
 
     ###-----------------------------Reading Imu datas Start --------------------###
