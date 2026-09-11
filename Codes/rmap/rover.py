@@ -27,7 +27,7 @@ class Rover:
         self.hold_distance = hold_distance
         self.influx = InfluxManager(
             url="http://localhost:8086",
-            token="zEyNrlATDlLyYHVSL93G17Ffv6kMMeYO4V999COYjqUlZ--gN_SsDbWm2Sf3s3tZFiIIN8AoJpaadJ7PwlDR_A==",
+            token="sqqCptwSSKAX9d9xIBg-DjrKkWVhSaO_lvUyBGZR1G6wrurnvL7ubh29MMRYSA-OtT2a4_PCPgGN0BLEKigg-Q==",
             org="projectA7",
             bucket="bucket",
             robot_id="robot_01",
