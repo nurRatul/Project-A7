@@ -4,29 +4,12 @@ from sensors.basic.imu.imuManager import IMUManager
 from sensors.basic.ultrasonic.ultrasonic import UltrasonicSensor
 from Arm.armcontroller import ArmController
 from logger.logger_manager import LoggerManager
-from dataclasses import dataclass, field
+from interfaces import RoverState, Object
+from influxdb.influxdb import InfluxManager
 from .rmap import mappingManager
 import threading
 import time
 import math
-
-@dataclass
-class Object:
-    name: str = field(default_factory=lambda: "Unknown")
-    id: int = field(default_factory=lambda: -1)
-    position: tuple = field(default_factory=lambda: (None, None))
-    pickedUp: bool = field(default=False)
-
-@dataclass
-class RoverState:
-    position: tuple = (None, None)
-    object_detected: bool = False
-    orientation: float = None
-    gps_fix: bool = False
-    imu_orientation: dict = field(default_factory=dict)
-    ultrasonic_telemetry: dict = field(default_factory=dict)
-    detected_objects: list = field(default_factory=list)
-    
 
 
 
@@ -42,11 +25,21 @@ class Rover:
         self.roverState = RoverState()
         self.mapping_manager = mappingManager(self.roverState, self.gps_manager, self.imu_manager, self.ultrasonic_sensor, self.car_controller, gps_port, gps_baudrate, gps_timeout)
         self.hold_distance = hold_distance
+        self.influx = InfluxManager(
+            url="http://localhost:8086",
+            token="YOUR_TOKEN",
+            org="robot",
+            bucket="robot_data",
+            robot_id="robot_01",
+            run_id="test_001",
+        )
 
         # --------------------------------------------#
         self.thread = threading.Thread(target=self.monitor_ultrasonic, args=(hold_distance,), daemon=True)
+        self.telemetry_thread = threading.Thread(target=self._telemetry_loop,daemon=True)
+        self.telemetry_thread.start()
         self.thread.start()
-        
+
         #---------------------------------------------#
         self.arm_controller._open_serial()
         self.arm_controller.home()
@@ -70,6 +63,39 @@ class Rover:
             if self.has_obstacle(threshold_m):
                 pass
             time.sleep(0.1)  # Adjust the sleep time as needed
+
+    def _telemetry_loop(self):
+
+        while True:
+
+            try:
+                # Get latest IMU data
+                imu_data = self.imu_manager.get_telemetry()
+
+                # Get latest GPS data
+                gps_data = self.gps_manager.get_telemetry()
+
+                # Get ultrasonic reading
+                ultrasonic_data = self.ultrasonic_sensor.read_mm()
+
+                # Send everything to InfluxDB
+                self.influx.write_telemetry(
+                    gps=gps_data,
+                    imu=imu_data,
+                    ultrasonic=ultrasonic_data,
+                )
+
+            except Exception as e:
+                print(f"Telemetry error: {e}")
+
+            # 20 Hz = 50 ms
+            time.sleep(0.05)
+
+    def close(self):
+        self.gps_manager.close()
+        self.imu_manager.close()
+        self.ultrasonic_sensor.close()
+        self.influx.close()
 
 
     
