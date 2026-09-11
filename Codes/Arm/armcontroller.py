@@ -183,6 +183,7 @@ class ArmController:
             for i in range (0,10):
                 try:
                     self._serial = serial.Serial(f'/dev/ttyACM{i}', cfg.ARDUINO_BAUD_RATE, timeout=cfg.ARDUINO_SERIAL_TIMEOUT_S)
+                    print(f'arm is connected to /dev/ttyACM{i}\n')
                     break
                 except serial.SerialException as e:
                     print(f"Error opening serial port: {e}")
@@ -251,6 +252,18 @@ class ArmController:
         time.sleep(.25)
         self.write_arduino([60,110,110,0,90+110-110,100])
         time.sleep(.25)
+
+    def dump_garbage_w2(self):
+            self.write_arduino([60,80,100,0,90+80-100,100])
+            time.sleep(2)
+            self.write_arduino([60,80,100,0,90+80-100,10])
+            time.sleep(.25)
+            self.write_arduino([120,170,100,0,90+170-100,10])
+            time.sleep(.25)
+            self.write_arduino([120,170,100,0,90+170-100,100])
+            time.sleep(.25)
+            self.write_arduino([60,110,110,0,90+110-110,100])
+            time.sleep(.25)
 
 
     # ========================================================
