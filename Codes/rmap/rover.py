@@ -67,13 +67,12 @@ class Rover:
                 gps_data = self.gps_manager.get_telemetry()
 
                 # Get ultrasonic reading
-                ultrasonic_data = self.ultrasonic_sensor.read_mm()
-                print(ultrasonic_data)
+                ultrasonic_data = self.ultrasonic_sensor.read_mm() or 500
 
-                # if int(ultrasonic_data) < threshold_m:
-                #     self.roverState.object_detected = True
-                # else:
-                #     self.roverState.object_detected = False
+                if int(ultrasonic_data) < threshold_m:
+                    self.roverState.object_detected = True
+                else:
+                    self.roverState.object_detected = False
 
                 # Send everything to InfluxDB
                 self.influx.write_telemetry(
