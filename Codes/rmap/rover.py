@@ -4,8 +4,8 @@ from sensors.basic.imu.imuManager import IMUManager
 from sensors.basic.ultrasonic.ultrasonic import UltrasonicSensor
 from Arm.armcontroller import ArmController
 from logger.logger_manager import LoggerManager
-from interfaces import RoverState, Object
 from influxdb.influxdb import InfluxManager
+from .interfaces import RoverState, Object
 from .rmap import mappingManager
 import threading
 import time
