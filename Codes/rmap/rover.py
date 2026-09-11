@@ -15,7 +15,7 @@ import math
 
 
 class Rover:
-    def __init__(self, gps_port="/dev/ttyAMA0", gps_baudrate=9600, gps_timeout=1.0, hold_distance=150):
+    def __init__(self, gps_port="/dev/ttyAMA0", gps_baudrate=9600, gps_timeout=1.0, hold_distance=250):
         self.gps_manager = GPSManager(port=gps_port, baudrate=gps_baudrate, timeout=gps_timeout)
         self.gps_manager.start()
         self.imu_manager = IMUManager()
