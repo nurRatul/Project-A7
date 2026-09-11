@@ -23,7 +23,7 @@ class Rover:
         self.car_controller = CarController()
         self.arm_controller = ArmController(ultrasonic_sensor= self.ultrasonic_sensor ,show_video=False)
         self.roverState = RoverState()
-        self.mapping_manager = mappingManager(self.roverState, self.arm_controller, self.gps_manager, self.imu_manager, self.ultrasonic_sensor, self.car_controller, gps_port, gps_baudrate, gps_timeout)
+        self.mapping_manager = mappingManager(self.roverState,  self.gps_manager, self.imu_manager, self.ultrasonic_sensor, self.car_controller, self.arm_controller, gps_port, gps_baudrate, gps_timeout)
         self.hold_distance = hold_distance
         self.influx = InfluxManager(
             url="http://localhost:8086",
