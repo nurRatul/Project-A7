@@ -35,10 +35,8 @@ class Rover:
         )
 
         # --------------------------------------------#
-        self.thread = threading.Thread(target=self.monitor_ultrasonic, args=(hold_distance,), daemon=True)
         self.telemetry_thread = threading.Thread(target=self._telemetry_loop,daemon=True)
         self.telemetry_thread.start()
-        self.thread.start()
 
         #---------------------------------------------#
         self.arm_controller._open_serial()
@@ -54,18 +52,11 @@ class Rover:
             return True
         return False
 
-    def monitor_ultrasonic(self, threshold_m= None):
+    def _telemetry_loop(self):
         if threshold_m is None:
             threshold_m = self.hold_distance
-        print("Monitor thread started")
-        while True:
-            # print("Monitor tick")
-            if self.has_obstacle(threshold_m):
-                pass
-            time.sleep(0.1)  # Adjust the sleep time as needed
-
-    def _telemetry_loop(self):
-
+            print("Monitor thread started")
+        
         while True:
 
             try:
@@ -77,6 +68,11 @@ class Rover:
 
                 # Get ultrasonic reading
                 ultrasonic_data = self.ultrasonic_sensor.read_mm()
+
+                if int(ultrasonic_data) < int(threshold_m):
+                    self.roverState.object_detected = True
+                else:
+                    self.roverState.object_detected = False
 
                 # Send everything to InfluxDB
                 self.influx.write_telemetry(
