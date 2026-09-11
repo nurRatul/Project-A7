@@ -1,4 +1,5 @@
 from Car.carController import CarController
+from Arm.armcontroller import ArmController
 from sensors.basic.gps.gpsManager import GPSManager
 from sensors.basic.imu.imuManager import IMUManager
 from sensors.basic.ultrasonic.ultrasonicManager import UltrasonicManager
@@ -27,13 +28,14 @@ class RoverState:
 
 
 class mappingManager:
-    def __init__(self, roverState: RoverState, gps_manager=None, imu_manager=None, ultrasonic_manager=None, car_controller=None, gps_port="/dev/ttyAMA0", gps_baudrate=9600, gps_timeout=1.0):
+    def __init__(self, roverState: RoverState, gps_manager=None, imu_manager=None, ultrasonic_manager=None, car_controller=None, arm_controller=None, gps_port="/dev/ttyAMA0", gps_baudrate=9600, gps_timeout=1.0):
         self.roverState = roverState
         self.gps_manager = gps_manager or GPSManager(port=gps_port, baudrate=gps_baudrate, timeout=gps_timeout)
         self.gps_manager.start()
         self.imu_manager = imu_manager or IMUManager()
         self.ultrasonic_manager = ultrasonic_manager or UltrasonicManager()
         self.car_controller = car_controller or CarController()
+        self.arm_controller = arm_controller or ArmController()
 
     def cover_area_nogps(self, x_direction=2, y_direction=2, speed=0.2):
 
@@ -48,7 +50,9 @@ class mappingManager:
                 print(self.roverState.object_detected)
                 if self.roverState.object_detected:
                     self.car_controller.stop()
-                    time.sleep(5) # wait for 5 seconds to pickup object. Here the arm code has to be implemented to pickup the object. After that the rover will continue to move forward.
+                    time.sleep(1)
+                    self.arm_controller.dump_garbage_w1()
+                     # wait for 5 seconds to pickup object. Here the arm code has to be implemented to pickup the object. After that the rover will continue to move forward.
                     self.car_controller.move_forward(deltaT=None, speed=speed)
                 self.roverState.object_detected = False
                 starting = time.time()

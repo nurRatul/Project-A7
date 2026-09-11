@@ -2,6 +2,7 @@ from Car.carController import CarController
 from sensors.basic.gps.gpsManager import GPSManager
 from sensors.basic.imu.imuManager import IMUManager
 from sensors.basic.ultrasonic.ultrasonic import UltrasonicSensor
+from Arm.armcontroller import ArmController
 from logger.logger_manager import LoggerManager
 from dataclasses import dataclass, field
 from .rmap import mappingManager
@@ -37,6 +38,7 @@ class Rover:
         self.imu_manager = IMUManager()
         self.ultrasonic_sensor = UltrasonicSensor(9,10,0,0)
         self.car_controller = CarController()
+        self.arm_controller = ArmController(show_video=False)
         self.roverState = RoverState()
         self.mapping_manager = mappingManager(self.roverState, self.gps_manager, self.imu_manager, self.ultrasonic_sensor, self.car_controller, gps_port, gps_baudrate, gps_timeout)
         self.hold_distance = hold_distance
@@ -44,6 +46,10 @@ class Rover:
         # --------------------------------------------#
         self.thread = threading.Thread(target=self.monitor_ultrasonic, args=(hold_distance,), daemon=True)
         self.thread.start()
+        
+        #---------------------------------------------#
+        self.arm_controller._open_serial()
+        self.arm_controller.home()
 
     def has_obstacle(self, threshold_m=None): ## put this code to the ultrasonicManager
         if threshold_m is None:

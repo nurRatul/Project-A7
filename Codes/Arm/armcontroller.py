@@ -2,8 +2,8 @@ import cv2
 import serial
 import time
 
+from sensors.basic.ultrasonic.ultrasonic import UltrasonicSensor, UltrasonicManager
 from .detector import BottleDetector
-from .ultrasonic import UltrasonicManager, UltrasonicSensor
 from .ik import inverse_kinematics
 from . import config as cfg
 
@@ -28,7 +28,7 @@ from . import config as cfg
 #   communication" note in chat).
 
 
-class Controller:
+class ArmController:
 
     def __init__(
         self,
