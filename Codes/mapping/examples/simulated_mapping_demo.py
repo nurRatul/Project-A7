@@ -1,9 +1,3 @@
-# from mapping.coveragePlanner import BoustrophedonPlanner
-
-# waypoints = BoustrophedonPlanner(width_m=5, height_m=3, lane_spacing_m=1.0, waypoint_spacing_m=0.5)
-# print(waypoints.generate())
-
-
 # simulated_mapping_demo.py
 
 """

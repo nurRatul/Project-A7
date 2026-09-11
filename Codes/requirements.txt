@@ -1,6 +1,21 @@
 pyserial>=3.5
+# Web server
+Flask>=3.0,<4.0
 opencv-python>=4.10
 numpy>=2.0
 sympy>=1.13
 keyboard>=0.13.5
-ultralytics>=8.4
+smbus2 >=0.4
+gpiozero>=2.0
+pynmea2>=1.5.0
+#ultralytics>=8.4
+
+
+ 
+# --- Hardware layer -------------------------------------------------------
+# RPi.GPIO>=0.7.1
+# gpiozero>=2.0
+# smbus2>=0.4
+# adafruit-circuitpython-motor
+# adafruit-circuitpython-motorkit
+ 

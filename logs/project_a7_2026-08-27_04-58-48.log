@@ -1,0 +1,388 @@
+2026-08-27 04:58:48 | INFO | serverController | Starting car controller server on 0.0.0.0:5000
+2026-08-27 04:58:48 | INFO | werkzeug | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.31.66:5000
+2026-08-27 04:58:48 | INFO | werkzeug | [33mPress CTRL+C to quit[0m
+2026-08-27 04:58:59 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:58:59] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-08-27 04:59:00 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:00 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:00] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:02 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:02 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:02] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:05 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:05 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:05] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:06 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:06 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:06] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:06 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:06 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:06] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:06 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:06 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:06] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:09 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:09 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:09] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:09 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:09 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:09] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:10 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:10 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:10] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:11 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:11 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:11] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:11 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:11 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:11] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:13 | INFO | serverController | /api/move -> backward at 0.15
+2026-08-27 04:59:13 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:13] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:15 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:15 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:15] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:15 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:15 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:15] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:16 | INFO | serverController | /api/move -> right at 0.15
+2026-08-27 04:59:16 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:16] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:17 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:17 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:17 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:17] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:17 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:17] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:17 | INFO | serverController | /api/move -> left at 0.15
+2026-08-27 04:59:17 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:17] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:18 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:18 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:18] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:18 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:18 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:18] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:19 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:19 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:19] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:21 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:21 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:21] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:21 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:21 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:21] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:21 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:21 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:21] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:22 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:22 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:22 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:22] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:22 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:22] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:22 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:22 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:22] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:23 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:23 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:23] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:24 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:24 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:24] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:25 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:25 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:25] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:26 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:26 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:26] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:26 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:26 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:26] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:26 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:26 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:26] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:26 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:26 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:26] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:27 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:27 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:27] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:27 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:27 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:27] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:27 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:27 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:27] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:27 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:27 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:27 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:27] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:27 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:27] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:28 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:28 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:28] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:28 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:28 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:28] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:28 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:28 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:28] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:28 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:28 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:28] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:29 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:29 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:29] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:29 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:29 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:29] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:29 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:29 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:29] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:29 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:29 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:29] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:29 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:29 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:29] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:30 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:30 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:30] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:30 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:30 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:30] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:30 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:30 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:30] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:32 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:32 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:32] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:33 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:33 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:33 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:33] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:33 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:33] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:33 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:33 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:33] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:33 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:33 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:33] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:33 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:33 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:33] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:33 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:33 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:33] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:33 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:33 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:33] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:33 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:33 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:33] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:34 | INFO | serverController | /api/move -> backward at 0.15
+2026-08-27 04:59:34 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:34] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:35 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:35 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:35] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:35 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:35 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:35] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:35 | INFO | serverController | /api/move -> backward at 0.15
+2026-08-27 04:59:35 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:35] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:35 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:35 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:35 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:35] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:35 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:35] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:35 | INFO | serverController | /api/move -> backward at 0.15
+2026-08-27 04:59:35 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:35] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:35 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:35 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:35] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:35 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:35 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:35] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:35 | INFO | serverController | /api/move -> backward at 0.15
+2026-08-27 04:59:35 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:35] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:36 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:36 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:36] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:36 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:36 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:36] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:36 | INFO | serverController | /api/move -> backward at 0.15
+2026-08-27 04:59:36 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:36] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:36 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:36 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:36] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:36 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:36 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:36] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:36 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:36 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:36] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:36 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:36 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:36] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:36 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:36 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:36] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:37 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:37 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:37] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:37 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:37 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:37] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:37 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:37 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:37] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:37 | INFO | serverController | /api/move -> backward at 0.15
+2026-08-27 04:59:37 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:37] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:37 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:37 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:37] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:37 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:37 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:37] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:38 | INFO | serverController | /api/move -> forward at 0.15
+2026-08-27 04:59:38 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:38] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:38 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:38 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:38 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:38] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:38 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:38] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:42 | INFO | serverController | /api/move -> right at 0.15
+2026-08-27 04:59:42 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:42] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:43 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:43 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:43] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:43 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:43 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:43] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:43 | INFO | serverController | /api/move -> right at 0.15
+2026-08-27 04:59:43 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:43] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:43 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:43 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:43] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:43 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:43 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:43] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:44 | INFO | serverController | /api/move -> right at 0.15
+2026-08-27 04:59:44 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:44] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:44 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:44 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:44] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:44 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:44 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:44] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:45 | INFO | serverController | /api/move -> left at 0.15
+2026-08-27 04:59:45 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:45] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:46 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:46 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:46] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:46 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:46 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:46] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:46 | INFO | serverController | /api/move -> right at 0.15
+2026-08-27 04:59:46 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:46] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:47 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:47 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:47] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:47 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:47 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:47] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:47 | INFO | serverController | /api/move -> left at 0.15
+2026-08-27 04:59:47 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:47] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:48 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:48 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:48] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:48 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:48 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:48] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:48 | INFO | serverController | /api/move -> right at 0.15
+2026-08-27 04:59:48 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:48] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:48 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:48 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:48] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:48 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:48 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:48] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:48 | INFO | serverController | /api/move -> left at 0.15
+2026-08-27 04:59:48 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:48] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:48 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:48 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:48] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:48 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:48 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:48] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:48 | INFO | serverController | /api/move -> right at 0.15
+2026-08-27 04:59:48 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:48] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:49 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:49 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:49] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:49 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:49 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:49] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:49 | INFO | serverController | /api/move -> left at 0.15
+2026-08-27 04:59:49 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:49] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:50 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:50 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:50 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:50] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:50 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:50] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:50 | INFO | serverController | /api/move -> right at 0.15
+2026-08-27 04:59:50 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:50] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:50 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:50 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:50] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:50 | INFO | serverController | /api/move -> stop at 0.15
+2026-08-27 04:59:50 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:50] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:52 | INFO | serverController | /api/move -> right at 0.50
+2026-08-27 04:59:52 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:52] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:54 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 04:59:54 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:54] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:54 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 04:59:54 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:54] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:55 | INFO | serverController | /api/move -> left at 0.50
+2026-08-27 04:59:55 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:55] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:57 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 04:59:57 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 04:59:57 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:57] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:57 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:57] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:58 | INFO | serverController | /api/move -> left at 0.50
+2026-08-27 04:59:58 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:58] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:58 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 04:59:58 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:58] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:58 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 04:59:58 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:58] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:58 | INFO | serverController | /api/move -> left at 0.50
+2026-08-27 04:59:58 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:58] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:59 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 04:59:59 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:59] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:59 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 04:59:59 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:59] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:59 | INFO | serverController | /api/move -> left at 0.50
+2026-08-27 04:59:59 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:59] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 04:59:59 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 04:59:59 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 04:59:59] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:00:00 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 05:00:00 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:00:00] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:00:00 | INFO | serverController | /api/move -> left at 0.50
+2026-08-27 05:00:00 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:00:00] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:00:00 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 05:00:00 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:00:00] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:00:00 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 05:00:00 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:00:00] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:00:00 | INFO | serverController | /api/move -> left at 0.50
+2026-08-27 05:00:00 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:00:00] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:00:00 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 05:00:00 | INFO | serverController | /api/move -> stop at 0.50
+2026-08-27 05:00:00 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:00:00] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:00:00 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:00:00] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:00:02 | INFO | serverController | /api/move -> left at 0.20
+2026-08-27 05:00:02 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:00:02] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:00:03 | INFO | serverController | /api/move -> stop at 0.20
+2026-08-27 05:00:03 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:00:03] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:00:03 | INFO | serverController | /api/move -> stop at 0.20
+2026-08-27 05:00:03 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:00:03] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:01:04 | INFO | serverController | /api/move -> stop at 0.20
+2026-08-27 05:01:04 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:01:04] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 05:23:32 | INFO | serverController | /api/move -> stop at 0.20
+2026-08-27 05:23:32 | INFO | werkzeug | 192.168.31.103 - - [27/Aug/2026 05:23:32] "POST /api/move HTTP/1.1" 200 -
+2026-08-27 06:05:26 | INFO | serverController | Shutting down — stopping car

@@ -1,0 +1,255 @@
+i will use different python code to run server and broadcast data. But, now, see the files and folder structures and preapere me a prompt for claude to prepare the mapping class so that i can give input area say 5m by 7 to map. set options like if object detected ( will use yolo and ultrasonic sensor for this purpose, put options there so that i can pass those sensors objects) the car stops and either side pass or grab and clear the area using arm (it has an arm with arm controller, add options for that too). And, if it sees an obstacle, it side pass it.
+
+
+
+You are helping design the software architecture of my rover project (Project A7).
+- code using python for pi 5
+- as the sensor readings of yolo and ultrasonic will be used in both the arm controller and car controller, if any modification needed in those sensors, make it with detailed documentation
+
+Current architecture:
+
+```text
+Robot
+│
+├── Car
+│   └── CarController
+│
+├── Arm
+│   └── ArmController
+│
+├── sensors
+│   ├── imu
+│   │   └── IMUManager
+│   │
+│   ├── gps
+│   │   └── GPSManager
+│   │
+│   ├── ultrasonic
+│   │   └── UltrasonicManager (planned)
+│   │
+│   └── vision
+│       └── VisionManager (YOLO based, planned)
+│
+└── mapping
+    └── MappingManager (to be designed)
+```
+
+Important architectural rules:
+
+1. CarController only controls movement.
+2. ArmController only controls the robotic arm.
+3. Sensor managers are independent and are NOT created inside CarController.
+4. MappingManager receives already-created objects through dependency injection.
+5. MappingManager must not directly access hardware.
+6. MappingManager should be reusable for simulation and real hardware.
+
+I want you to design a complete MappingManager class architecture and implementation plan.
+
+# Mission Goal
+
+The rover will be given an area to map.
+
+Example:
+
+```python
+mapper.start_mapping(
+    width_m=5,
+    height_m=7
+)
+```
+
+The rover should then autonomously explore and map the entire area.
+
+# Available Sensors
+
+IMUManager:
+
+* heading/yaw
+* orientation
+
+GPSManager:
+
+* global position
+
+UltrasonicManager:
+
+* front distance
+* left distance
+* right distance
+
+VisionManager:
+
+* YOLO detections
+* object classification
+
+ArmController:
+- don't touch the arm code now
+* use yolo detection and ultrasonic data and ik to control arm
+* pick objects
+* move objects
+* clear obstacles
+
+CarController:
+
+* move
+* stop
+* rotate
+* drive
+
+# Mapping Requirements
+
+The mapping system should:
+
+1. Cover the entire rectangular area.
+2. Record visited positions.
+3. Record detected obstacles.
+4. Record detected objects.
+5. Save a map structure for later reuse.
+6. Support GPS + IMU navigation.
+7. Work outdoors in open sky conditions.
+8. Support future SLAM upgrades.
+
+# Coverage Strategy
+
+I want a lawnmower / boustrophedon pattern.
+
+Example for 5m × 7m:
+
+```text
+→→→→→
+↓
+←←←←←
+↓
+→→→→→
+↓
+←←←←←
+```
+
+The rover should continue until the full area is covered.
+
+# Obstacle Handling
+
+When an obstacle is detected by ultrasonic sensors:
+
+```python
+front_distance < threshold
+```
+
+the rover should:
+
+1. Stop immediately.
+2. Record obstacle location.
+3. Attempt local avoidance.
+4. Rejoin the original mapping path.
+
+Design a side-pass algorithm for this.
+
+# Object Handling
+
+VisionManager may detect objects using YOLO.
+
+Examples:
+
+* bottle
+* box
+* rock
+* trash
+
+I want MappingManager to support configurable policies.
+
+Example:
+
+```python
+MappingManager(
+    object_policy="ignore"
+)
+```
+
+or
+
+```python
+MappingManager(
+    object_policy="avoid"
+)
+```
+
+or
+
+```python
+MappingManager(
+    object_policy="pickup"
+)
+```
+
+Behavior:
+
+IGNORE:
+
+* continue mapping
+
+AVOID:
+
+* mark location
+* navigate around object
+
+PICKUP:
+
+* stop
+* align with object
+* call ArmController
+* remove object
+* continue mapping
+
+Create a clean architecture for these policies.
+
+# Map Data Structure
+
+Design a reusable map structure that stores:
+
+* GPS position
+* local coordinates
+* heading
+* visited state
+* obstacles
+* detected objects
+* timestamps
+
+The map must later be serializable to:
+
+* JSON
+* file storage
+* WiFi transmission
+
+# State Machine
+
+Create a state machine for:
+
+IDLE
+INITIALIZING
+MAPPING
+AVOIDING_OBSTACLE
+PICKING_OBJECT
+RETURNING_TO_PATH
+COMPLETED
+ERROR
+
+Explain transitions.
+
+# Output Required
+
+Provide:
+
+1. Full class architecture.
+2. UML-style class relationships.
+3. Data models.
+4. Mapping algorithm.
+5. Obstacle avoidance algorithm.
+6. Object pickup workflow.
+7. GPS + IMU fusion strategy.
+8. Suggested Python package structure.
+9. Important edge cases.
+10. Future improvements.
+
+Do not write production code yet.
+
+Focus on architecture, class design, interfaces, algorithms, and extensibility.
