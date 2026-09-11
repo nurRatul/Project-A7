@@ -11,7 +11,7 @@ import config as cfg
 
 
 
-class BottleDetector:
+class Detector:
 
     def __init__(
         self,

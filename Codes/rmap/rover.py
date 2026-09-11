@@ -21,7 +21,7 @@ class Rover:
         self.imu_manager = IMUManager()
         self.ultrasonic_sensor = UltrasonicSensor(9,10,0,0)
         self.car_controller = CarController()
-        self.arm_controller = ArmController(show_video=False)
+        self.arm_controller = ArmController(ultrasonic_sensor= self.ultrasonic_sensor ,show_video=False)
         self.roverState = RoverState()
         self.mapping_manager = mappingManager(self.roverState, self.gps_manager, self.imu_manager, self.ultrasonic_sensor, self.car_controller, gps_port, gps_baudrate, gps_timeout)
         self.hold_distance = hold_distance

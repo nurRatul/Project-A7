@@ -3,7 +3,7 @@ import serial
 import time
 
 from sensors.basic.ultrasonic.ultrasonic import UltrasonicSensor, UltrasonicManager
-from .detector import BottleDetector
+from .detector import Detector
 from .ik import inverse_kinematics
 from . import config as cfg
 
@@ -32,6 +32,7 @@ class ArmController:
 
     def __init__(
         self,
+        ultrasonic_sensor = None,
         show_video=True,
         camera_id=cfg.CAMERA_ID,
         debug=True,
@@ -51,10 +52,10 @@ class ArmController:
 
         self.window_name = "Rover Controller"
 
-        self.detector = BottleDetector()
+        self.detector = Detector()
 
         # self.ultrasonic = UltrasonicManager()    #for three ultrasonic
-        self.ultrasonic= UltrasonicSensor(cfg.CENTER_SENSOR_TRIGGER_PIN, cfg.CENTER_SENSOR_ECHO_PIN,cfg.CENTER_SENSOR_X_OFFSET,cfg.CENTER_SENSOR_Z_OFFSET)  #for one ultrasonic
+        self.ultrasonic= ultrasonic_sensor # UltrasonicSensor(cfg.CENTER_SENSOR_TRIGGER_PIN, cfg.CENTER_SENSOR_ECHO_PIN,cfg.CENTER_SENSOR_X_OFFSET,cfg.CENTER_SENSOR_Z_OFFSET)  #for one ultrasonic
         self._serial = None
 
         if self.enable_motion:
