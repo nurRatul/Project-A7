@@ -174,9 +174,12 @@ class CarController:
             if orientation is None:
                 return min_speed
             pitch = orientation["pitch"]
+            print(pitch)
 
         # Map pitch to speed
         speed = min_speed + (abs(pitch) / 90.0) * (max_speed - min_speed)
+        if pitch<0:
+            return min_speed
         return max(-max_speed, min(max_speed, speed))
 
 
