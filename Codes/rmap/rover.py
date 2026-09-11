@@ -97,5 +97,8 @@ class Rover:
         self.ultrasonic_sensor.close()
         self.influx.close()
 
+    def map(self, x_dire = 1, y_dire = 1, speed=.2):
+        self.mapping_manager.cover_area_nogps(x_dire,y_dire,speed)
+
 
     
