@@ -86,7 +86,7 @@ class Rover:
                 )
 
             except Exception as e:
-                print(f"Telemetry error: {e}")
+                print(f"\rTelemetry error: {e}")
 
             # 20 Hz = 50 ms
             time.sleep(0.05)

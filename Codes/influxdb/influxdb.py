@@ -39,6 +39,7 @@ class InfluxManager:
         if imu:
             accel = imu.get("linear_acceleration_ms2", {})
             orientation = imu.get("orientation_deg", {})
+            velocity = imu.get("velocity_ms", {})
 
             point = (
                 Point("imu")
@@ -60,6 +61,14 @@ class InfluxManager:
                         point.field(
                             axis,
                             float(orientation[axis])
+                        )
+
+            if velocity:
+                for axis in ("x", "y", "z"):
+                    if axis in velocity:
+                        point.field(
+                            axis,
+                            float(velocity[axis])
                         )
 
             if len(point._fields) > 0:
