@@ -1,8 +1,3 @@
-from Car.carController import CarController
-from Arm.armcontroller import ArmController
-from sensors.basic.gps.gpsManager import GPSManager
-from sensors.basic.imu.imuManager import IMUManager
-from sensors.basic.ultrasonic.ultrasonicManager import UltrasonicManager
 from logger.logger_manager import LoggerManager
 from .interfaces import RoverState, Object
 import time
@@ -14,17 +9,18 @@ import math
 class mappingManager:
     def __init__(self, roverState: RoverState, gps_manager=None, imu_manager=None, ultrasonic_manager=None, car_controller=None, arm_controller=None, gps_port="/dev/ttyAMA0", gps_baudrate=9600, gps_timeout=1.0):
         self.roverState = roverState
-        self.gps_manager = gps_manager or GPSManager(port=gps_port, baudrate=gps_baudrate, timeout=gps_timeout)
+        self.gps_manager = gps_manager
         self.gps_manager.start()
-        self.imu_manager = imu_manager or IMUManager()
-        self.ultrasonic_manager = ultrasonic_manager or UltrasonicManager()
-        self.car_controller = car_controller or CarController()
-        self.arm_controller = arm_controller or ArmController(show_video=False)
+        self.imu_manager = imu_manager
+        self.ultrasonic_manager = ultrasonic_manager
+        self.car_controller = car_controller
+        self.arm_controller = arm_controller
 
     def cover_area_nogps(self, x_direction=2, y_direction=2, speed=0.2):
 
         for i in range(1, math.ceil(y_direction)+1):
-            deltaT = x_direction / speed
+            k = 1.36 #correction factor
+            deltaT = x_direction / (speed * k)
             print(f"Moving forward for {deltaT} seconds at speed {speed}")
             time_covered = 0
             starting = time.time()
