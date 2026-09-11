@@ -168,7 +168,7 @@ class CarController:
         self.left_motor.stop()
         self.right_motor.stop()
 
-    def pitch_to_speed(self, pitch=None,min_speed=0.1, max_speed=1.0):
+    def pitch_to_speed(self, pitch=None,min_speed=0.1, max_speed=.4):
         if pitch is None:
             orientation = self.get_orientation()
             if orientation is None:
@@ -176,7 +176,7 @@ class CarController:
             pitch = orientation["pitch"]
 
         # Map pitch to speed
-        speed = min_speed + (pitch / 90.0) * (max_speed - min_speed)
+        speed = min_speed + (abs(pitch) / 90.0) * (max_speed - min_speed)
         return max(-max_speed, min(max_speed, speed))
 
 
