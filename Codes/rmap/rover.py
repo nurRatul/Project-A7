@@ -34,6 +34,8 @@ class Rover:
             run_id="test_001",
         )
 
+        self.imu_manager.calibrate()
+
         # --------------------------------------------#
         self.telemetry_thread = threading.Thread(target=self._telemetry_loop,daemon=True)
         self.telemetry_thread.start()
