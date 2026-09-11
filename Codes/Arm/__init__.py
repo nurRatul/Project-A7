@@ -1,2 +1,2 @@
-from .armcontroller import Controller
+from .armcontroller import ArmController
 from . import *
