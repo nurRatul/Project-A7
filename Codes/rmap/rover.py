@@ -52,7 +52,7 @@ class Rover:
             return True
         return False
 
-    def _telemetry_loop(self,threshold_m):
+    def _telemetry_loop(self,threshold_m=None):
         if threshold_m is None:
             threshold_m = self.hold_distance
             print("Monitor thread started")
