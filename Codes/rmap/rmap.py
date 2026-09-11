@@ -10,7 +10,6 @@ class mappingManager:
     def __init__(self, roverState: RoverState, gps_manager=None, imu_manager=None, ultrasonic_manager=None, car_controller=None, arm_controller=None, gps_port="/dev/ttyAMA0", gps_baudrate=9600, gps_timeout=1.0):
         self.roverState = roverState
         self.gps_manager = gps_manager
-        self.gps_manager.start()
         self.imu_manager = imu_manager
         self.ultrasonic_manager = ultrasonic_manager
         self.car_controller = car_controller

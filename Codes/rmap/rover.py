@@ -84,8 +84,8 @@ class Rover:
             except Exception as e:
                 print(f"\rTelemetry error: {e}")
 
-            # 20 Hz = 50 ms
-            time.sleep(0.05)
+            # 10 Hz = 100 ms
+            time.sleep(0.1)
 
     def close(self):
         self.gps_manager.close()
