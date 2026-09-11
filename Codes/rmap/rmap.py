@@ -27,10 +27,8 @@ class mappingManager:
             print(f"Moving forward for {deltaT} seconds at speed {speed}")
             time_covered = 0
             starting = time.time()
-            speed = self.car_controller.pitch_to_speed(min_speed=speed)
             self.car_controller.move_forward(deltaT=None, speed=speed)
             while time_covered < deltaT:
-                speed = self.car_controller.pitch_to_speed(min_speed=speed)
                 time_covered =time_covered + (time.time() - starting)
                 print(self.roverState.object_detected)
                 if self.roverState.object_detected:
