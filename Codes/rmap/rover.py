@@ -55,7 +55,7 @@ class Rover:
     def _telemetry_loop(self,threshold_m=None):
         if threshold_m is None:
             threshold_m = self.hold_distance
-            print("Monitor thread started")
+            print(f"Monitor thread started for ultrasonic threashold {threshold_m}")
         
         while True:
 
@@ -69,7 +69,7 @@ class Rover:
                 # Get ultrasonic reading
                 ultrasonic_data = self.ultrasonic_sensor.read_mm()
 
-                if int(ultrasonic_data) < int(threshold_m):
+                if int(ultrasonic_data) < threshold_m:
                     self.roverState.object_detected = True
                 else:
                     self.roverState.object_detected = False
