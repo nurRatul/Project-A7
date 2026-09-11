@@ -35,7 +35,7 @@ class mappingManager:
         self.imu_manager = imu_manager or IMUManager()
         self.ultrasonic_manager = ultrasonic_manager or UltrasonicManager()
         self.car_controller = car_controller or CarController()
-        self.arm_controller = arm_controller or ArmController()
+        self.arm_controller = arm_controller or ArmController(show_video=False)
 
     def cover_area_nogps(self, x_direction=2, y_direction=2, speed=0.2):
 
