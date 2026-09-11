@@ -112,6 +112,7 @@ class CarController:
         start_yaw = self.get_orientation()["yaw"]
 
         self.drive(-speed, speed)
+        self.imu.reset()
 
         while True:
             current_yaw = self.get_orientation()["yaw"]
@@ -146,6 +147,7 @@ class CarController:
         start_yaw = self.get_orientation()["yaw"]
 
         self.drive(speed, -speed)
+        self.imu.reset()
 
         while True:
 
@@ -172,7 +174,6 @@ class CarController:
 
     def get_orientation(self):
         if self.imu:
-            self.imu.reset()
             return self.imu.get_orientation()
         return None
 
