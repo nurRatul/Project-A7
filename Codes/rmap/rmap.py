@@ -22,8 +22,8 @@ class mappingManager:
         self.imu_manager.reset()
 
         for i in range(1, math.ceil(y_direction)+1):
-            k = 1.0 # This is a constant that can be adjusted based on the rover's characteristics
-            deltaT = (x_direction / speed) * k
+            k = 1.36 # This is a constant that can be adjusted based on the rover's characteristics
+            deltaT = x_direction / (speed * k)
             print(f"Moving forward for {deltaT} seconds at speed {speed}")
             time_covered = 0
             starting = time.time()
