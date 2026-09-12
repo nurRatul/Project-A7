@@ -3,7 +3,7 @@ import serial
 import time
 
 from sensors.basic.ultrasonic.ultrasonic import UltrasonicSensor, UltrasonicManager
-from .detector import Detector
+from .detectorManager import DetectorManager
 from .ik import inverse_kinematics
 from . import config as cfg
 
@@ -33,6 +33,8 @@ class ArmController:
     def __init__(
         self,
         ultrasonic_sensor = None,
+        detector = None,
+        own_camera = False,
         show_video=True,
         camera_id=cfg.CAMERA_ID,
         debug=True,
@@ -52,7 +54,22 @@ class ArmController:
 
         self.window_name = "Rover Controller"
 
-        self.detector = Detector()
+        # Three ways this can go:
+        #   1) detector=<shared instance>  -- borrow Rover's camera, don't
+        #      own it, never release it from here.
+        #   2) own_camera=True, detector=None -- standalone use (e.g.
+        #      testing this file by itself): opens and owns its own camera.
+        #   3) neither -- no vision at all. Fine for arm-only workflows
+        #      that never call update(), e.g. mappingManager calling
+        #      dump_garbage_w1() directly off a shared roverState flag
+        #      instead of running its own detection pass.
+        self._owns_detector = detector is None and own_camera
+        if detector is not None:
+            self.detector = detector
+        elif own_camera:
+            self.detector = DetectorManager(auto_start=True)
+        else:
+            self.detector = None
 
         # self.ultrasonic = UltrasonicManager()    #for three ultrasonic
         self.ultrasonic= ultrasonic_sensor # UltrasonicSensor(cfg.CENTER_SENSOR_TRIGGER_PIN, cfg.CENTER_SENSOR_ECHO_PIN,cfg.CENTER_SENSOR_X_OFFSET,cfg.CENTER_SENSOR_Z_OFFSET)  #for one ultrasonic
@@ -309,6 +326,15 @@ class ArmController:
         Returns the final (base, link1, theta2) servo angles, or
         None if nothing valid was found this frame.
         """
+
+        if self.detector is None:
+            print(
+                "ArmController has no detector -- pass one from Rover "
+                "(detector=rover.detector) or construct with "
+                "own_camera=True if this call needs vision."
+            )
+            self.angles = None
+            return None
 
         frame = self.detector.read_frame()
 
@@ -594,7 +620,8 @@ class ArmController:
 
     def close(self):
 
-        self.detector.release()
+        if self._owns_detector and self.detector is not None:
+            self.detector.release()
 
         #self.ultrasonic.close()  #for three ults
 
