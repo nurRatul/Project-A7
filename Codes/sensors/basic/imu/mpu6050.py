@@ -95,7 +95,7 @@ class MPU6050:
         time.sleep(0.1)
         divider = max(0, min(255, int(1000 / sample_rate_hz) - 1))
         self.bus.write_byte_data(self.address, self.SMPLRT_DIV, divider)
-        self.bus.write_byte_data(self.address, self.CONFIG, 0x03)       # DLPF ~44Hz
+        self.bus.write_byte_data(self.address, self.CONFIG, 0x04)       # DLPF ~44Hz
         self.bus.write_byte_data(self.address, self.GYRO_CONFIG, 0x00)  # +-250 dps
         self.bus.write_byte_data(self.address, self.ACCEL_CONFIG, 0x00)  # +-2g
 
