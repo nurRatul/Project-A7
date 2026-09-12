@@ -49,7 +49,7 @@ class Detector:
         camera_config = self.camera.create_video_configuration(
             main={
                 "format": "BGR888",
-                "size": (640, 480),  # 480p
+                "size": (1080, 720),  # 720p
             },
             buffer_count=2,
         )
