@@ -60,6 +60,8 @@ class ArmController:
 
         if self.enable_motion:
             self._open_serial()
+        if self._serial is not None:
+            self.home()
 
         # ====================================================
         # OUTPUT / LAST-FRAME DATA
@@ -203,7 +205,7 @@ class ArmController:
 
     def home(self):
         try:
-            self._serial.write(b'H0,90,20,90,90,73,20\n')
+            self._serial.write(b'H60,60,20,180,0,73,20\n')
         except serial.SerialException as error:
             print(f"Failed to send to Arduino: {error}")
             

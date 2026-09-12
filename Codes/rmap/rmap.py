@@ -16,8 +16,8 @@ class mappingManager:
         self.arm_controller = arm_controller
 
     def cover_area_nogps(self, x_direction=2, y_direction=2, speed=0.2):
-
-        for i in range(1, math.ceil(y_direction)+1):
+        row_spacing = .25
+        for i in range(1, math.ceil(y_direction/row_spacing)+1):
             k = 1.36 #correction factor
             deltaT = x_direction / (speed * k)
             print(f"Moving forward for {deltaT} seconds at speed {speed}")
@@ -51,10 +51,66 @@ class mappingManager:
                     self.car_controller.turn_left(speed=speed,angle=90)
 
     def cover_area_gps(self, x_direction=2, y_direction=2, speed=0.2):
+
         self.gps_manager.reset()
         self.imu_manager.reset()
-        # implement the logic to cover the area using GPS and IMU data
-        pass
+        self.imu_manager.calibrate()
+
+        row_spacing = 1.0
+
+        for row in range(1, math.ceil(y_direction) + 1):
+
+            # Move along row
+            self.gps_manager.reset()
+            self.car_controller.move_forward(deltaT=None, speed=speed)
+
+            while True:
+
+                dist = self.gps_manager.distance_meters()
+
+                if dist is None:
+                    time.sleep(0.2)
+                    continue
+
+                if self.roverState.object_detected:
+                    self.car_controller.stop()
+                    self.arm_controller.dump_garbage_w1()
+                    self.car_controller.move_forward(deltaT=None, speed=speed)
+
+                if dist >= x_direction:
+                    break
+
+                time.sleep(0.1)
+
+            self.car_controller.stop()
+
+            if row >= math.ceil(y_direction):
+                break
+
+            # Change lane
+            turn = (
+                self.car_controller.turn_left
+                if row % 2 else
+                self.car_controller.turn_right
+            )
+
+            turn(speed=speed, angle=90)
+
+            self.gps_manager.reset()
+            self.car_controller.move_forward(deltaT=None, speed=speed)
+
+            while True:
+                dist = self.gps_manager.distance_meters()
+
+                if dist is not None and dist >= row_spacing:
+                    break
+
+                time.sleep(0.1)
+
+            self.car_controller.stop()
+            turn(speed=speed, angle=90)
+
+        self.car_controller.stop()
 
 
-        
+            

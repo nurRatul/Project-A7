@@ -66,7 +66,7 @@ CAMERA_ID = 0
 IMAGE_WIDTH = 1080
 IMAGE_HEIGHT = 720
 CONFIDENCE = 0.50
-DEFAULT_POLL_HZ = 10
+DEFAULT_POLL_HZ = 50
 
 # COCO class ids VisionManager reports on out of the box. Extend or
 # replace via VisionManager(target_classes=...) — see the module
