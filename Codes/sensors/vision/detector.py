@@ -22,6 +22,7 @@ from threading import Lock, Thread
 
 import cv2
 from picamera2 import Picamera2
+from libcamera import controls
 from ultralytics import YOLO
 
 sys.path.append(str(Path(__file__).resolve().parent))
@@ -57,6 +58,21 @@ class Detector:
 
         # Continuous autofocus
         self.camera.set_controls({"AfMode": 2})
+        full_size = self.camera.camera_properties["PixelArraySize"]
+
+        self.camera.set_controls({
+            # Continuous autofocus
+            "AfMode": controls.AfModeEnum.Continuous,
+            "AfTrigger": controls.AfTriggerEnum.Start,
+
+            # Maximum field of view (no digital zoom)
+            "ScalerCrop": (
+                0,
+                0,
+                full_size[0],
+                full_size[1],
+            ),
+        })
 
     def read_frame(self):
         """Blocks until the next raw BGR frame is available."""
