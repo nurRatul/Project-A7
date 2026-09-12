@@ -11,6 +11,7 @@ class Object:
 class RoverState:
     position: tuple = (None, None)
     object_detected: bool = False
+    nearby: bool = False
     orientation: float = None
     gps_fix: bool = False
     imu_orientation: dict = field(default_factory=dict)

@@ -26,14 +26,14 @@ class mappingManager:
             self.car_controller.move_forward(deltaT=None, speed=speed)
             while time_covered < deltaT:
                 time_covered =time_covered + (time.time() - starting)
-                print(self.roverState.object_detected)
-                if self.roverState.object_detected:
+                print(self.roverState.nearby)
+                if self.roverState.nearby:
                     self.car_controller.stop()
                     time.sleep(1)
                     self.arm_controller.dump_garbage_w1()
                      # wait for 5 seconds to pickup object. Here the arm code has to be implemented to pickup the object. After that the rover will continue to move forward.
                     self.car_controller.move_forward(deltaT=None, speed=speed)
-                self.roverState.object_detected = False
+                self.roverState.nearby = False
                 starting = time.time()
                 time.sleep(0.1)
                 print(f"\n\nTime covered: {time_covered:.2f} seconds")
@@ -57,60 +57,67 @@ class mappingManager:
         self.imu_manager.calibrate()
 
         row_spacing = 1.0
+        row_k = .25
 
-        for row in range(1, math.ceil(y_direction) + 1):
+        if self.gps_manager.has_fix():
 
-            # Move along row
-            self.gps_manager.reset()
-            self.car_controller.move_forward(deltaT=None, speed=speed)
+            for row in range(1, math.ceil(y_direction/row_k) + 1):
 
-            while True:
+                # Move along row
+                self.gps_manager.reset()
+                self.car_controller.move_forward(deltaT=None, speed=speed)
 
-                dist = self.gps_manager.distance_meters()
+                while True:
 
-                if dist is None:
-                    time.sleep(0.2)
-                    continue
+                    dist = self.gps_manager.distance_meters()
 
-                if self.roverState.object_detected:
-                    self.car_controller.stop()
-                    self.arm_controller.dump_garbage_w1()
-                    self.car_controller.move_forward(deltaT=None, speed=speed)
+                    if dist is None:
+                        time.sleep(0.2)
+                        continue
 
-                if dist >= x_direction:
+                    if self.roverState.nearby:
+                        self.car_controller.stop()
+                        self.arm_controller.dump_garbage_w1()
+                        self.car_controller.move_forward(deltaT=None, speed=speed)
+                        self.roverState.nearby = False
+
+                    if dist >= x_direction:
+                        break
+
+                    time.sleep(0.1)
+
+                self.car_controller.stop()
+
+                if row >= math.ceil(y_direction):
                     break
 
-                time.sleep(0.1)
+                # Change lane
+                turn = (
+                    self.car_controller.turn_left
+                    if row % 2 else
+                    self.car_controller.turn_right
+                )
+
+                turn(speed=speed, angle=90)
+
+                self.gps_manager.reset()
+                self.car_controller.move_forward(deltaT=None, speed=speed)
+
+                while True:
+                    dist = self.gps_manager.distance_meters()
+
+                    if dist is not None and dist >= row_spacing:
+                        break
+
+                    time.sleep(0.1)
+
+                self.car_controller.stop()
+                turn(speed=speed, angle=90)
 
             self.car_controller.stop()
 
-            if row >= math.ceil(y_direction):
-                break
-
-            # Change lane
-            turn = (
-                self.car_controller.turn_left
-                if row % 2 else
-                self.car_controller.turn_right
-            )
-
-            turn(speed=speed, angle=90)
-
-            self.gps_manager.reset()
-            self.car_controller.move_forward(deltaT=None, speed=speed)
-
-            while True:
-                dist = self.gps_manager.distance_meters()
-
-                if dist is not None and dist >= row_spacing:
-                    break
-
-                time.sleep(0.1)
-
-            self.car_controller.stop()
-            turn(speed=speed, angle=90)
-
-        self.car_controller.stop()
+        else:
+            print("Gps not found yet. Aborting the whole thing.")
 
 
             

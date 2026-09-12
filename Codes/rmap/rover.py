@@ -5,6 +5,8 @@ from sensors.basic.ultrasonic.ultrasonic import UltrasonicSensor
 from Arm.armcontroller import ArmController
 from logger.logger_manager import LoggerManager
 from influxdb.influxdb import InfluxManager
+from sensors.vision.detectorManager import DetectorManager
+from sensors.vision.videoStream import run_video_server_in_thread
 from .interfaces import RoverState, Object
 from .rmap import mappingManager
 import threading
@@ -25,6 +27,8 @@ class Rover:
         self.roverState = RoverState()
         self.mapping_manager = mappingManager(self.roverState,  self.gps_manager, self.imu_manager, self.ultrasonic_sensor, self.car_controller, self.arm_controller, gps_port, gps_baudrate, gps_timeout)
         self.hold_distance = hold_distance
+        self.detector = DetectorManager(rate_hz=30, auto_start=True)
+        self.video_thread = run_video_server_in_thread(self.detector,host="0.0.0.0",port=5001)
         self.influx = InfluxManager(
             url="http://localhost:8086",
             token="sqqCptwSSKAX9d9xIBg-DjrKkWVhSaO_lvUyBGZR1G6wrurnvL7ubh29MMRYSA-OtT2a4_PCPgGN0BLEKigg-Q==",
@@ -39,6 +43,8 @@ class Rover:
         # --------------------------------------------#
         self.telemetry_thread = threading.Thread(target=self._telemetry_loop,daemon=True)
         self.telemetry_thread.start()
+        self.vision_thread = threading.Thread(target=self._vision_loop ,daemon=True)
+        self.vision_thread.start()
 
         #---------------------------------------------#
         self.arm_controller._open_serial()
@@ -50,7 +56,7 @@ class Rover:
         distance = self.ultrasonic_sensor.read_mm() or 500
         # print(f"Ultrasonic distance: {distance} mm, Threshold: {threshold_m} mm")
         if int(distance) < int(threshold_m):
-            self.roverState.object_detected = True
+            self.roverState.nearby = True
             return True
         return False
 
@@ -72,9 +78,9 @@ class Rover:
                 ultrasonic_data = self.ultrasonic_sensor.read_mm() or 500
 
                 if int(ultrasonic_data) < threshold_m:
-                    self.roverState.object_detected = True
+                    self.roverState.nearby = True
                 else:
-                    self.roverState.object_detected = False
+                    self.roverState.nearby = False
 
                 # Send everything to InfluxDB
                 self.influx.write_telemetry(
@@ -87,6 +93,24 @@ class Rover:
                 print(f"\rTelemetry error: {e}")
 
             # 10 Hz = 100 ms
+            time.sleep(0.1)
+            
+
+    def _vision_loop(self):
+
+        while True:
+
+            try:
+                result = self.detector.get_snapshot()
+
+                self.roverState.detected_objects = result["detections"]
+
+                if result["has_detection"]:
+                    self.roverState.object_detected = True
+
+            except Exception as e:
+                print(f"Vision error: {e}")
+
             time.sleep(0.1)
 
     def close(self):
