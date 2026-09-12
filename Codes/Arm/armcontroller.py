@@ -3,7 +3,7 @@ import serial
 import time
 
 from sensors.basic.ultrasonic.ultrasonic import UltrasonicSensor, UltrasonicManager
-from .detectorManager import DetectorManager
+from sensors.vision.detectorManager import DetectorManager
 from .ik import inverse_kinematics
 from . import config as cfg
 
