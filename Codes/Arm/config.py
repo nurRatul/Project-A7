@@ -23,7 +23,7 @@ full list of what to fill in.
 # CAMERA
 # ------------------------------------------------------------
 
-MODEL_PATH = "yolo26n.pt"
+MODEL_PATH = "exp2.pt"
 
 CAMERA_ID = 0
 
@@ -32,7 +32,7 @@ IMAGE_HEIGHT = 720
 
 YOLO_CONFIDENCE = 0.25   # was named CONFIDENCE in your original detector.py
 
-BOTTLE_CLASS_ID = 39    # COCO class id for "bottle"
+BOTTLE_CLASS_ID = 5    # COCO class id for "bottle"
 
 # Camera calibration (pinhole model).
 #
