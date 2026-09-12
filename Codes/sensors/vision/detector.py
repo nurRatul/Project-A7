@@ -49,15 +49,14 @@ class Detector:
         camera_config = self.camera.create_video_configuration(
             main={
                 "format": "BGR888",
-                "size": (cfg.IMAGE_WIDTH, cfg.IMAGE_HEIGHT),
+                "size": (640, 480),  # 480p
             },
-            buffer_count=2,  # minimizes DMA RAM consumption
+            buffer_count=2,
         )
+
         self.camera.configure(camera_config)
         self.camera.start()
 
-        # Continuous autofocus
-        self.camera.set_controls({"AfMode": 2})
         full_size = self.camera.camera_properties["PixelArraySize"]
 
         self.camera.set_controls({
@@ -65,7 +64,7 @@ class Detector:
             "AfMode": controls.AfModeEnum.Continuous,
             "AfTrigger": controls.AfTriggerEnum.Start,
 
-            # Maximum field of view (no digital zoom)
+            # Full sensor = widest possible FOV (no digital zoom)
             "ScalerCrop": (
                 0,
                 0,
