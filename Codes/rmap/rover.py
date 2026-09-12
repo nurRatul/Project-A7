@@ -31,7 +31,7 @@ class Rover:
         self.video_thread = run_video_server_in_thread(self.detector,host="0.0.0.0",port=5001)
         self.influx = InfluxManager(
             url="http://localhost:8086",
-            token="sqqCptwSSKAX9d9xIBg-DjrKkWVhSaO_lvUyBGZR1G6wrurnvL7ubh29MMRYSA-OtT2a4_PCPgGN0BLEKigg-Q==",
+            token="qXTd_8Wj7qxxYQxUOOj7zDBNXBylOTKVGP_q7qrYzX8GmXGjF6b32fydgxihjlzhV84nnAAA5YLWZz9woksNcw==",
             org="projectA7",
             bucket="bucket",
             robot_id="robot_01",
