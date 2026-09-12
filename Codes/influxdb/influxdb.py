@@ -1,6 +1,6 @@
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
-
+import math
 
 class InfluxManager:
 
@@ -49,11 +49,14 @@ class InfluxManager:
 
             if accel:
                 for axis in ("x", "y", "z"):
+                    avg_acc = 0
                     if axis in accel:
+                        avg_acc = avg_acc + accel[axis]**2
                         point.field(
                             f"accel_{axis}",
                             float(accel[axis])
                         )
+                point.field("avg_accelaration", math.sqrt(avg_acc))
 
             if orientation:
                 for axis in ("roll", "pitch", "yaw"):
@@ -65,11 +68,15 @@ class InfluxManager:
 
             if velocity:
                 for axis in ("x", "y", "z"):
+                    avg_speed  = 0
                     if axis in velocity:
+                        avg_speed = avg_speed + velocity[axis]**2
                         point.field(
                             axis,
                             float(velocity[axis])
                         )
+                point.field("avg_speed",math.sqrt(avg_speed))
+
 
             if len(point._fields) > 0:
                 points.append(point)
