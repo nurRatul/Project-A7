@@ -1,3 +1,3 @@
-from .visionManager import VisionManager, VisionManagerDetectorAdapter
+from .detectorManager import DetectorManager
 
-__all__ = ["VisionManager", "VisionManagerDetectorAdapter"]
+__all__ = ["DetectorManager"]
