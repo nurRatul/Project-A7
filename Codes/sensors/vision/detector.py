@@ -25,7 +25,7 @@ from picamera2 import Picamera2
 from ultralytics import YOLO
 
 sys.path.append(str(Path(__file__).resolve().parent))
-import config as cfg
+import Arm.config as cfg
 
 from logger.logger_manager import LoggerManager
 
