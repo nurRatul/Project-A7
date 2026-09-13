@@ -262,28 +262,28 @@ class ArmController:
 
     def dump_garbage_w1(self):
         #initial
-        self.arm_controller.write_arduino([60,60,80,0,120,80])
+        self.write_arduino([60,60,80,0,120,80])
         time.sleep(.25)
 
 
-        self.arm_controller.write_arduino([60,60,180,0,120,80])
+        self.write_arduino([60,60,180,0,120,80])
         time.sleep(2)
 
 
         #2
-        self.arm_controller.write_arduino([60,60,180,0,120,0])
+        self.write_arduino([60,60,180,0,120,0])
         time.sleep(.25)
 
         #3
-        self.arm_controller.write_arduino([30,60,0,0,0,0])
+        self.write_arduino([30,60,0,0,0,0])
         time.sleep(.25)
 
         #4
-        self.arm_controller.write_arduino([30,60,0,0,0,100])
+        self.write_arduino([30,60,0,0,0,100])
         time.sleep(.25)
 
         #5
-        self.arm_controller.write_arduino([60,60,80,0,120,100])
+        self.write_arduino([60,60,80,0,120,100])
         time.sleep(.25)
 
     def dump_garbage_w2(self):
