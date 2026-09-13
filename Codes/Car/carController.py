@@ -112,7 +112,7 @@ class CarController:
         start_yaw = self.get_orientation()["yaw"]
 
         self.drive(-speed, speed)
-        self.imu.reset()
+
 
         while True:
             current_yaw = self.get_orientation()["yaw"]
@@ -124,7 +124,7 @@ class CarController:
             if abs(rotated) >= angle:
                 break
 
-            sleep(0.01)
+            sleep(0.09)
 
         self.stop()
 
@@ -147,7 +147,7 @@ class CarController:
         start_yaw = self.get_orientation()["yaw"]
 
         self.drive(speed, -speed)
-        self.imu.reset()
+
 
         while True:
 
@@ -160,7 +160,7 @@ class CarController:
             if abs(rotated) >= angle:
                 break
 
-            sleep(0.01)
+            sleep(0.09)
         self.stop()
 
 

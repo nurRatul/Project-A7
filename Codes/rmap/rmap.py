@@ -17,7 +17,7 @@ class mappingManager:
 
     def cover_area_nogps(self, x_direction=2, y_direction=2, speed=0.2):
         row_spacing = .25
-        for i in range(1, int(y_direction/row_spacing)):
+        for i in range(1, y_direction):
             k = 1.36 #correction factor
             deltaT = x_direction / (speed * k)
             print(f"\rMoving forward for {deltaT} seconds at speed {speed}")
@@ -42,16 +42,14 @@ class mappingManager:
             self.car_controller.stop()
                 
 
-            if i <= y_direction:
-                print("turning\n")
-                if i % 2 == 0:
-                    self.car_controller.turn_right(speed=speed,angle=90)
-                    self.car_controller.move_forward(deltaT=1, speed=speed)
-                    self.car_controller.turn_right(speed=speed,angle=90)
-                else:
-                    self.car_controller.turn_left(speed=speed,angle=90)
-                    self.car_controller.move_forward(deltaT=1, speed=speed)
-                    self.car_controller.turn_left(speed=speed,angle=90)
+            if i % 2 == 0:
+                self.car_controller.turn_right(speed=speed,angle=90)
+                self.car_controller.move_forward(deltaT=1, speed=speed)
+                self.car_controller.turn_right(speed=speed,angle=90)
+            else:
+                self.car_controller.turn_left(speed=speed,angle=90)
+                self.car_controller.move_forward(deltaT=1, speed=speed)
+                self.car_controller.turn_left(speed=speed,angle=90)
 
     def cover_area_gps(self, x_direction=2, y_direction=2, speed=0.2):
 
