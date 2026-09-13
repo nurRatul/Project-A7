@@ -279,11 +279,11 @@ class ArmController:
         time.sleep(.25)
 
         #4
-        self.write_arduino([30,60,0,0,0,100])
+        self.write_arduino([30,60,0,0,0,80])
         time.sleep(.25)
 
         #5
-        self.write_arduino([60,60,80,0,120,100])
+        self.write_arduino([60,60,80,0,120,80])
         time.sleep(.25)
 
     def dump_garbage_w2(self):
