@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+import time
 
 @dataclass
 class Object:
@@ -18,4 +19,17 @@ class RoverState:
     imu_orientation: dict = field(default_factory=dict)
     ultrasonic_telemetry: dict = field(default_factory=dict)
     detected_objects: list = field(default_factory=list)
-    
+
+    # --- pickup / distance tracking, used to size the "nearby" threshold ---
+    last_pickup_time: float = None          # time.time() of the most recent successful pickup
+    requested_object_distance: float = None  # distance (mm) requested by the current mapping run, if any
+
+    def mark_picked_up(self):
+        """Call this right after a successful dump_garbage_w1/w2() call."""
+        self.last_pickup_time = time.time()
+
+    def recently_picked_up(self, window: float = 5.0) -> bool:
+        """True if an object was picked up within the last `window` seconds."""
+        if self.last_pickup_time is None:
+            return False
+        return (time.time() - self.last_pickup_time) < window

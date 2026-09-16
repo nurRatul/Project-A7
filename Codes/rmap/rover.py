@@ -27,6 +27,7 @@ class Rover:
         self.roverState = RoverState()
         self.mapping_manager = mappingManager(self.roverState,  self.gps_manager, self.imu_manager, self.ultrasonic_sensor, self.car_controller, self.arm_controller, gps_port, gps_baudrate, gps_timeout)
         self.hold_distance = hold_distance
+        self.pickup_hold_distance = 50  # tighter "nearby" threshold (mm) for 5s right after a pickup
         self.detector = DetectorManager(rate_hz=30, auto_start=True)
         self.video_thread = run_video_server_in_thread(self.detector,host="0.0.0.0",port=5001)
         self.influx = InfluxManager(
@@ -50,9 +51,22 @@ class Rover:
         self.arm_controller._open_serial()
         self.arm_controller.home()
 
+    def get_object_threshold(self):
+        """
+        Decide the ultrasonic distance (mm) that should count as "nearby":
+          1. self.pickup_hold_distance (50mm), if an object was picked up within the last 5s
+          2. the distance requested by the current mapping run (rmap's object_distance), if any
+          3. self.hold_distance (250mm by default) otherwise
+        """
+        if self.roverState.recently_picked_up():
+            return self.pickup_hold_distance
+        if self.roverState.requested_object_distance is not None:
+            return self.roverState.requested_object_distance
+        return self.hold_distance
+
     def has_obstacle(self, threshold_m=None): ## put this code to the ultrasonicManager
         if threshold_m is None:
-            threshold_m = self.hold_distance
+            threshold_m = self.get_object_threshold()
         distance = self.ultrasonic_sensor.read_mm() or 500
         # print(f"Ultrasonic distance: {distance} mm, Threshold: {threshold_m} mm")
         if int(distance) < int(threshold_m):
@@ -61,10 +75,11 @@ class Rover:
         return False
 
     def _telemetry_loop(self,threshold_m=None):
-        if threshold_m is None:
-            threshold_m = self.hold_distance
-            print(f"Monitor thread started for ultrasonic threashold {threshold_m}")
-        
+        if threshold_m is not None:
+            print(f"Monitor thread started for fixed ultrasonic threashold {threshold_m}")
+        else:
+            print("Monitor thread started with dynamic ultrasonic threashold (pickup=50mm / rmap distance / hold_distance)")
+
         while True:
 
             try:
@@ -77,7 +92,12 @@ class Rover:
                 # Get ultrasonic reading
                 ultrasonic_data = self.ultrasonic_sensor.read_mm() or 500
 
-                if int(ultrasonic_data) < threshold_m:
+                # Recompute every cycle (unless a fixed override was passed in)
+                # so a recent pickup, or a distance requested by rmap, takes
+                # effect immediately.
+                active_threshold = threshold_m if threshold_m is not None else self.get_object_threshold()
+
+                if int(ultrasonic_data) < active_threshold:
                     self.roverState.nearby = True
                 else:
                     self.roverState.nearby = False
@@ -120,8 +140,5 @@ class Rover:
         self.ultrasonic_sensor.close()
         self.influx.close()
 
-    def map(self, x_dire = 1, y_dire = 1, speed=.2):
-        self.mapping_manager.cover_area_nogps(x_dire,y_dire,speed)
-
-
-    
+    def map(self, x_dire = 1, y_dire = 1, speed=.2, object_distance=None):
+        self.mapping_manager.cover_area_nogps(x_dire, y_dire, speed, object_distance=object_distance)
