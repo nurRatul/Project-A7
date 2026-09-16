@@ -17,7 +17,7 @@ class mappingManager:
 
     def cover_area_nogps(self, x_direction=2, y_direction=2, speed=0.2):
         row_spacing = .25
-        for i in range(1, y_direction):
+        for i in range(1, int(y_direction/row_spacing)):
             k = 1.36 #correction factor
             deltaT = x_direction / (speed * k)
             print(f"\rMoving forward for {deltaT} seconds at speed {speed}")
@@ -26,8 +26,6 @@ class mappingManager:
             self.car_controller.move_forward(deltaT=None, speed=speed)
             while time_covered < deltaT:
                 time_covered =time_covered + (time.time() - starting)
-                starting = time.time()
-                time.sleep(.1)
                 print(self.roverState.nearby)
                 if self.roverState.nearby:
                     self.car_controller.stop()
@@ -37,6 +35,8 @@ class mappingManager:
                      # wait for 5 seconds to pickup object. Here the arm code has to be implemented to pickup the object. After that the rover will continue to move forward.
                     self.car_controller.move_forward(deltaT=None, speed=speed)
                 self.roverState.nearby = False
+                starting = time.time()
+                time.sleep(.1)
 
                 print(f"\n\nTime covered: {time_covered:.2f} seconds")
             self.car_controller.stop()
