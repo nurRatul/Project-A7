@@ -16,6 +16,7 @@ class RoverState:
     disposible = 0
     nondisposible = 0
     orientation: float = None
+    current_object = None
     gps_fix: bool = False
     imu_orientation: dict = field(default_factory=dict)
     ultrasonic_telemetry: dict = field(default_factory=dict)
