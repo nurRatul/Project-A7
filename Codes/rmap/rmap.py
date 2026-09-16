@@ -15,7 +15,7 @@ class mappingManager:
         self.car_controller = car_controller
         self.arm_controller = arm_controller
 
-    def cover_area_nogps(self, x_direction=2, y_direction=2, speed=0.2):
+    def cover_area_nogps(self, x_direction=2, y_direction=2, speed=0.2,object_distance=50):
         row_spacing = .25
         for i in range(1, int(y_direction/row_spacing)):
             k = 1.36 #correction factor
