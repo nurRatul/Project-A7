@@ -144,7 +144,7 @@ class InfluxManager:
 
             points.append(point)
 
-        if nondispossible:
+        if nondispossible>0:
                 point = ( 
                     Point("NonDispossible")
                     .tag("robot_id", self.robot_id)
