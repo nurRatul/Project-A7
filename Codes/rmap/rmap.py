@@ -41,7 +41,7 @@ class mappingManager:
                 print(f"\n\nTime covered: {time_covered:.2f} seconds")
             self.car_controller.stop()
                 
-
+            self.imu_manager.reset()
             if i % 2 == 0:
                 self.car_controller.turn_right(speed=speed,angle=90)
                 self.car_controller.move_forward(deltaT=1, speed=speed)
