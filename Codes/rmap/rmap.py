@@ -33,11 +33,11 @@ class mappingManager:
         if method_name is None:
             print(f"No disposal method mapped for object id {object_id}; skipping.")
             return False
-        if method_name is "dump_garbage_w1":
+        if method_name =="dump_garbage_w1":
             self.roverState.disposible = self.roverState.disposible + 1
-        if method_name is "dump_garbage_w2":
+        if method_name == "dump_garbage_w2":
             self.roverState.nondisposible = self.roverState.nondisposible + 1
-            
+
         getattr(self.arm_controller, method_name)()
         return True
 
