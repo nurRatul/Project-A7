@@ -10,7 +10,6 @@ from sensors.vision.videoStream import run_video_server_in_thread
 from .interfaces import RoverState, Object
 from .rmap import mappingManager
 import threading
-from copy import deepcopy
 import time
 import math
 
@@ -26,7 +25,6 @@ class Rover:
         self.car_controller = CarController()
         self.arm_controller = ArmController(ultrasonic_sensor= self.ultrasonic_sensor ,show_video=False)
         self.roverState = RoverState()
-        self.objects = []
         self.mapping_manager = mappingManager(self.roverState,  self.gps_manager, self.imu_manager, self.ultrasonic_sensor, self.car_controller, self.arm_controller, gps_port, gps_baudrate, gps_timeout)
         self.hold_distance = hold_distance
         self.pickup_hold_distance = 50  # tighter "nearby" threshold (mm) for 5s right after a pickup
@@ -109,8 +107,7 @@ class Rover:
                     gps=gps_data,
                     imu=imu_data,
                     ultrasonic=ultrasonic_data,
-                    dispossible=self.roverState.disposible,
-                    nondispossible=self.roverState.nondisposible
+                    dispossible=self.roverState.disposible
                 )
 
             except Exception as e:
@@ -129,29 +126,8 @@ class Rover:
 
                 self.roverState.detected_objects = result["detections"]
 
-                current = self.roverState.current_object
-
-                # Once mappingManager has successfully disposed of the
-                # currently-latched object, archive it and reset the slot so
-                # a *new* object can be latched. Doing this here (instead of
-                # resetting pickedUp back to False on the same instance)
-                # means id goes back to -1, the "nothing latched" sentinel.
-                if current.pickedUp:
-                    self.objects.append(deepcopy(current))
-                    current = Object()
-                    self.roverState.current_object = current
-
-                # Only latch a new detection while we aren't already
-                # tracking one that's waiting to be collected. This stops a
-                # later/irrelevant detection from overwriting the id of the
-                # object mappingManager is currently driving toward.
-                if result["has_detection"] and current.id == -1:
+                if result["has_detection"]:
                     self.roverState.object_detected = True
-                    obj = result["detections"][-1]
-                    current.name = obj["class_name"]
-                    current.id = obj["class_id"]
-                    current.confidence = obj["confidence"]
-                    current.pickedUp = False
 
             except Exception as e:
                 print(f"Vision error: {e}")
