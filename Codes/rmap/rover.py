@@ -89,7 +89,8 @@ class Rover:
                     gps=gps_data,
                     imu=imu_data,
                     ultrasonic=ultrasonic_data,
-                    dispossible=self.roverState.disposible
+                    dispossible=self.roverState.disposible,
+                    nondispossible=self.roverState.nondisposible
                 )
 
             except Exception as e:

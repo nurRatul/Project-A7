@@ -32,6 +32,7 @@ class RoverState:
     object_detected: bool = False
     nearby: bool = False
     disposible: int = 0
+    nondisposible: int = 0
     orientation: float = None
     gps_fix: bool = False
     imu_orientation: dict = field(default_factory=dict)
