@@ -203,6 +203,7 @@ class ArmController:
                 try:
                     self._serial = serial.Serial(f'/dev/ttyACM{i}', cfg.ARDUINO_BAUD_RATE, timeout=cfg.ARDUINO_SERIAL_TIMEOUT_S)
                     print(f'arm is connected to /dev/ttyACM{i}\n')
+                    self.home()
                     break
                 except serial.SerialException as e:
                     print(f"Error opening serial port: {e}")
