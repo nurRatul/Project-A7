@@ -43,11 +43,13 @@ class mappingManager:
                 
             self.imu_manager.reset()
             if i % 2 == 0:
-                self.car_controller.turn_right(speed=speed,angle=65) # for low proced imu, 67 == 90 here lol
+                # self.car_controller.turn_right(speed=speed,angle=65) # for low proced imu, 67 == 90 here lol
+                self.car_controller.turn_right(deltaT=1.26,speed=speed)
                 self.car_controller.move_forward(deltaT=2*int(speed/.1), speed=speed)
                 self.car_controller.turn_right(speed=speed,angle=65)
             else:
-                self.car_controller.turn_left(speed=speed,angle=65)
+                # self.car_controller.turn_left(speed=speed,angle=65)
+                self.car_controller.turn_left(deltaT=1.26,speed=speed)
                 self.car_controller.move_forward(deltaT=2*int(speed/.1), speed=speed)
                 self.car_controller.turn_left(speed=speed,angle=65)
 
