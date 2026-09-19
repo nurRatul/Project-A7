@@ -46,12 +46,14 @@ class mappingManager:
                 # self.car_controller.turn_right(speed=speed,angle=65) # for low proced imu, 67 == 90 here lol
                 self.car_controller.turn_right(deltaT=1.26,speed=speed)
                 self.car_controller.move_forward(deltaT=2*int(speed/.1), speed=speed)
-                self.car_controller.turn_right(speed=speed,angle=65)
+                # self.car_controller.turn_right(speed=speed,angle=65)
+                self.car_controller.turn_right(deltaT=1.26,speed=speed)
             else:
                 # self.car_controller.turn_left(speed=speed,angle=65)
                 self.car_controller.turn_left(deltaT=1.26,speed=speed)
                 self.car_controller.move_forward(deltaT=2*int(speed/.1), speed=speed)
-                self.car_controller.turn_left(speed=speed,angle=65)
+                # self.car_controller.turn_left(speed=speed,angle=65)
+                self.car_controller.turn_left(deltaT=1.26,speed=speed)
 
     def cover_area_gps(self, x_direction=2, y_direction=2, speed=0.2):
 
